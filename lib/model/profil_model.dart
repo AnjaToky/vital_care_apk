@@ -1,3 +1,5 @@
+import 'package:vital_care/DAO/profil_DAO.dart';
+
 class Profil {
   int? id;
   String name;
@@ -6,7 +8,7 @@ class Profil {
   double poids;
   String allergies;
   String traitements;
-  String image;
+  String? image;
 
   Profil({
     this.id,
@@ -16,9 +18,8 @@ class Profil {
     required this.poids,
     required this.allergies,
     required this.traitements,
-    required this.image,
+    required this.image, required,
   });
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,18 +33,17 @@ class Profil {
       'image': image,
     };
   }
+}
 
+class ProfilModel {
+  ProfilDao profilDao = ProfilDao();
 
-  factory Profil.fromMap(Map<String, dynamic> map) {
-    return Profil(
-      id: map['id'],
-      name: map['name'],
-      age: map['age'],
-      taille: map['taille'],
-      poids: map['poids'],
-      allergies: map['allergies'],
-      traitements: map['traitements'],
-      image: map['image'],
-    );
-  }
+  Future<int> ajouterProfil(Profil profil) async =>
+      await profilDao.ajouterProfil(profil);
+
+  Future<int> modifierProfil(Profil profil) async =>
+      await profilDao.modifierProfil(profil);
+
+  Future<Profil?> afficherProfil() async =>
+      await profilDao.afficherProfil();
 }

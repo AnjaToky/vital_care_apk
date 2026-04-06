@@ -44,6 +44,7 @@ class DatabaseHelper {
       hydratation TEXT NOT NULL,
       tension_systolique TEXT NOT NULL,
       tension_diastolique TEXT NOT NULL
+      created_at TEXT NOT NULL
     )
   ''');
 
@@ -53,7 +54,32 @@ class DatabaseHelper {
       nom TEXT NOT NULL,
       dosage TEXT NOT NULL,
       frequence TEXT NOT NULL,
-      heure TEXT NOT NULL
+      heure TEXT NOT NULL,
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE imc (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      imc_value TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE tension (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tension_systolique TEXT NOT NULL,
+      tension_diastolique TEXT NOT NULL,
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE moyenne_tension (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      moyenne_systolique TEXT NOT NULL,
+      moyenne_diastolique TEXT NOT NULL,
+      created_at TEXT NOT NULL
     )
   ''');
   }

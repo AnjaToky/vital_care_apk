@@ -66,12 +66,12 @@ class ProfilDao {
     }
   }
 
-  Future<List<Profil>> afficherProfil() async {
+  Future<Profil?> afficherProfil() async {
     final db = await dbProvide.database;
     final result = await db.query('profile', orderBy: 'id DESC');
     await _ensureEncryptService();
 
-    List<Profil> listeDecrypte = [];
+    Profil? profilDecrypte;
 
     for (final row in result) {
       try {
@@ -86,23 +86,21 @@ class ProfilDao {
           row['traitements'] as String,
         );
 
-        listeDecrypte.add(
-          Profil(
-            id: row['id'] as int,
-            name: nameClair,
-            age: int.parse(ageClair),
-            taille: double.parse(tailleClair),
-            poids: double.parse(poidsClair),
-            allergies: allergiesClair,
-            traitements: traitementsClair,
-            image: row['image'] as String,
-          ),
+        profilDecrypte = Profil(
+          id: row['id'] as int,
+          name: nameClair,
+          age: int.parse(ageClair),
+          taille: double.parse(tailleClair),
+          poids: double.parse(poidsClair),
+          allergies: allergiesClair,
+          traitements: traitementsClair,
+          image: row['image'] as String,
         );
       } catch (e) {
         print('Erreur lors du déchiffrement du profil : $e');
       }
     }
 
-    return listeDecrypte;
+    return profilDecrypte;
   }
 }

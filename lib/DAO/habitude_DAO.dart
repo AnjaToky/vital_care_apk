@@ -15,19 +15,28 @@ class HabitudeDao {
     _encryptService = await EncryptService.create(storage);
   }
 
-
-
-  Future <int> ajouterHabitude(Habitude habitude) async{
+  Future<int> ajouterHabitude(Habitude habitude) async {
     await _ensureEncryptService();
-    final db  = await dbProvider.database;
+    final db = await dbProvider.database;
     final map = habitude.toMap();
 
-    try{
+    try {
       // Encrypt sensitive fields
-      map['poid_habitude'] = _encryptService!.encrypt(habitude.poidHabitude.toString());
-      map['hydratation'] = _encryptService!.encrypt(habitude.hydratation.toString());
-      map['tension_systolique'] = _encryptService!.encrypt(habitude.tensionSystolique.toString());
-      map['tenstion_diastolique'] = _encryptService!.encrypt(habitude.tenstionDiastolique.toString());
+      map['poid_habitude'] = _encryptService!.encrypt(
+        habitude.poidHabitude.toString(),
+      );
+      map['hydratation'] = _encryptService!.encrypt(
+        habitude.hydratation.toString(),
+      );
+      map['tension_systolique'] = _encryptService!.encrypt(
+        habitude.tensionSystolique.toString(),
+      );
+      map['tenstion_diastolique'] = _encryptService!.encrypt(
+        habitude.tenstionDiastolique.toString(),
+      );
+      map['created_at'] = _encryptService!.encrypt(
+        habitude.createdAt.toIso8601String(),
+      );
 
       return await db.insert(
         'habitude',
@@ -40,34 +49,47 @@ class HabitudeDao {
     }
   }
 
-
-  Future <int> supprimerHabitude(int id) async{
-    final db  = await dbProvider.database;
-    return await db.delete(
-      'habitude',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+  Future<int> supprimerHabitude(int id) async {
+    final db = await dbProvider.database;
+    return await db.delete('habitude', where: 'id = ?', whereArgs: [id]);
   }
 
-
-  Future <List<Habitude>> afficherHabitude() async{
+  Future<Habitude?> afficherHabitude() async {
     final db = await dbProvider.database;
     final result = await db.query('habitude', orderBy: 'id DESC');
-    final habitudes = result.map((e) => Habitude.fromMap(e)).toList();
     await _ensureEncryptService();
-
-    for(final h in habitudes){
+    Habitude? habitudeDecrypte;
+    for (final row in result) {
       try {
-        h.poidHabitude = double.parse(_encryptService!.decrypt(h.poidHabitude.toString()));
-        h.hydratation = double.parse(_encryptService!.decrypt(h.hydratation.toString()));
-        h.tensionSystolique = double.parse(_encryptService!.decrypt(h.tensionSystolique.toString()));
-        h.tenstionDiastolique = double.parse(_encryptService!.decrypt(h.tenstionDiastolique.toString()));
+        final poidHabitudeClair = _encryptService!.decrypt(
+          row['poid_habitude'] as String,
+        );
+        final hydratationClair = _encryptService!.decrypt(
+          row['hydratation'] as String,
+        );
+        final tensionSystoliqueClair = _encryptService!.decrypt(
+          row['tension_systolique'] as String,
+        );
+        final tensionDiastoliqueClair = _encryptService!.decrypt(
+          row['tenstion_diastolique'] as String,
+        );
+        final createdAtClair = _encryptService!.decrypt(
+          row['created_at'] as String,
+        );
+        
+        habitudeDecrypte = Habitude(
+          id: row['id'] as int,
+          poidHabitude: double.parse(poidHabitudeClair),
+          hydratation: double.parse(hydratationClair),
+          tensionSystolique: double.parse(tensionSystoliqueClair),
+          tenstionDiastolique: double.parse(tensionDiastoliqueClair),
+          createdAt: DateTime.parse(createdAtClair),
+        );
       } catch (e) {
         print('Error decrypting habit data: $e');
       }
     }
 
-    return habitudes;
+    return habitudeDecrypte;
   }
-} 
+}

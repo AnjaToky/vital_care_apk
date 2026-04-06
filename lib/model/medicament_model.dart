@@ -6,6 +6,8 @@ class Medicament {
   double dosage;
   int frequence;
   DateTime heure;
+  bool estPris;
+  bool estManque = false;
 
   Medicament({
     this.id,
@@ -13,6 +15,8 @@ class Medicament {
     required this.dosage,
     required this.frequence,
     required this.heure,
+    this.estPris = false,
+    this.estManque = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,16 +27,6 @@ class Medicament {
       'frequence': frequence,
       'heure': heure.toIso8601String(),
     };
-  }
-
-  factory Medicament.fromMap(Map<String, dynamic> map) {
-    return Medicament(
-      id: map['id'],
-      nom: map['nom'],
-      dosage: map['dosage'],
-      frequence: map['frequence'],
-      heure: map['heure'],
-    );
   }
 }
 

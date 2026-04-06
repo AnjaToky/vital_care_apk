@@ -1,8 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:vital_care/view/ajout_profil_view.dart';
+import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
 
 void main() {
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -14,7 +24,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Vital Care',
-      home: MedicamentView(),
+      home: ProfilView(),
+      initialRoute: '/profil',
+      routes: {
+        '/profil': (context) => ProfilView(),
+        '/ajout': (context) => AjoutProfilView(),
+        '/medicament': (context) => MedicamentView(),
+      },
     );
   }
 }

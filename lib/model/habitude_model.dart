@@ -1,9 +1,12 @@
+import 'package:vital_care/DAO/habitude_DAO.dart';
+
 class Habitude {
   int? id;
   double poidHabitude;
   double hydratation;
   double tensionSystolique;
   double tenstionDiastolique;
+  DateTime createdAt;
 
   Habitude({
     this.id,
@@ -11,7 +14,8 @@ class Habitude {
     required this.hydratation,
     required this.tensionSystolique,
     required this.tenstionDiastolique,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   Map<String, dynamic> toMap() {
     return {
@@ -20,16 +24,20 @@ class Habitude {
       'hydratation': hydratation,
       'tension_systolique': tensionSystolique,
       'tenstion_diastolique': tenstionDiastolique,
+      'created_at': createdAt.toIso8601String(),
     };
   }
+}
 
-  factory Habitude.fromMap(Map<String, dynamic> map) {
-    return Habitude(
-      id: map['id'],
-      poidHabitude: map['poid_habitude'],
-      hydratation: map['hydratation'],
-      tensionSystolique: map['tension_systolique'],
-      tenstionDiastolique: map['tenstion_diastolique'],
-    );
-  }
+class HabitudeModel {
+  HabitudeDao habitudeDao = HabitudeDao();
+
+  Future<int> ajouterHabitude(Habitude habitude) async =>
+      await habitudeDao.ajouterHabitude(habitude);
+
+  Future<int> supprimerHabitude(int id) async =>
+      await habitudeDao.supprimerHabitude(id);
+
+  Future<Habitude?> afficherHabitude() async =>
+      await habitudeDao.afficherHabitude();
 }
