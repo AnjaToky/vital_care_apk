@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:vital_care/view/ajout_habitude.dart';
 import 'package:vital_care/view/ajout_profil_view.dart';
+import 'package:vital_care/view/auth_guard_view.dart';
+import 'package:vital_care/view/biometric_auth_view.dart';
 import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
 
@@ -24,12 +27,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Vital Care',
-      home: ProfilView(),
-      initialRoute: '/profil',
+      home: AjoutHabitude(),
+      //initialRoute: '/profil',
       routes: {
         '/profil': (context) => ProfilView(),
-        '/ajout': (context) => AjoutProfilView(),
-        '/medicament': (context) => MedicamentView(),
+        '/ajout': (context) => const AuthGuardView(child: AjoutProfilView()),
+        '/medicament': (context) => const AuthGuardView(child: MedicamentView()),
       },
     );
   }

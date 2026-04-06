@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:vital_care/configBdd/datbaseHelper.dart';
+import 'package:vital_care/configBdd/datbase_helper.dart';
 import 'package:vital_care/model/profil_model.dart';
 import 'package:vital_care/securite/encrypt_service.dart';
 import 'package:vital_care/securite/secure_storage_service.dart';
@@ -35,7 +35,7 @@ class ProfilDao {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      print('Erreur lors de l\'ajout du profil : $e');
+      //print('Erreur lors de l\'ajout du profil : $e');
       return -1; // Indique une erreur
     }
   }
@@ -61,7 +61,7 @@ class ProfilDao {
         whereArgs: [profil.id],
       );
     } catch (e) {
-      print('Erreur lors de la modification du profil : $e');
+      //print('Erreur lors de la modification du profil : $e');
       return -1; // Indique une erreur
     }
   }
@@ -97,7 +97,7 @@ class ProfilDao {
           image: row['image'] as String,
         );
       } catch (e) {
-        print('Erreur lors du déchiffrement du profil : $e');
+       // print('Erreur lors du déchiffrement du profil : $e');
       }
     }
 

@@ -1,5 +1,5 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vital_care/configBdd/datbaseHelper.dart';
+import 'package:vital_care/configBdd/datbase_helper.dart';
 import 'package:vital_care/model/tension_model.dart';
 import 'package:vital_care/securite/encrypt_service.dart';
 import 'package:vital_care/securite/secure_storage_service.dart';
@@ -27,7 +27,7 @@ class TensionDao {
         tension.tensionDiastolique.toString(),
       );
     } catch (e) {
-      print('Error occurred while adding tension: $e');
+      //print('Error occurred while adding tension: $e');
       rethrow;
     }
     return await db.insert(
@@ -65,7 +65,7 @@ class TensionDao {
           ),
         );
       } catch (e) {
-        print('Error occurred while decrypting tension data: $e');
+        //print('Error occurred while decrypting tension data: $e');
       }
     }
     return tensionDecrypte;

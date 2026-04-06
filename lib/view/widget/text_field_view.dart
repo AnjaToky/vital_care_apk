@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 
 class TextFieldView {
-
+  Widget ligneBleu() {
+    return Container(
+      height: 2,
+      width: double.infinity,
+      color: Couleur.primaryColor,
+      margin: const EdgeInsets.symmetric(vertical: 16),
+    );
+  }
 
   Widget buildLabel(String text) {
     return Padding(
@@ -18,8 +25,7 @@ class TextFieldView {
     );
   }
 
-
-   Widget buildTextField(
+  Widget buildTextField(
     TextEditingController controller,
     String hint, [
     TextInputType keyboardType = TextInputType.text,
@@ -32,7 +38,10 @@ class TextFieldView {
         hintStyle: TextStyle(color: Colors.grey[400]),
         filled: true,
         fillColor: Couleur.backgroundColor,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Couleur.primaryColor, width: 1.5),

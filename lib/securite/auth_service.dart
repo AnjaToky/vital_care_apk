@@ -5,12 +5,11 @@ class AuthService {
   final LocalAuthentication _auth = LocalAuthentication();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  static const int maxAttempts = 3; // nombre d'échecs autorisés
-  static const int blockDurationSeconds = 20; // blocage temporaire
+  static const int maxAttempts = 3;
+  static const int blockDurationSeconds = 20;
 
-  /// Authentifie l'utilisateur
   Future<bool> authenticate() async {
-    if (await isBlocked()) return false; // bloqué ?
+    if (await isBlocked()) return false;
 
     try {
       final canCheck = await _auth.canCheckBiometrics;
@@ -19,7 +18,7 @@ class AuthService {
 
       final result = await _auth.authenticate(
         localizedReason: 'Pose ton doigt ou entre ton PIN',
-        //options: const AuthenticationOptions(biometricOnly: false),
+        options:  AuthenticationOptions(biometricOnly: false),
       );
 
       if (result) {
@@ -71,5 +70,13 @@ class AuthService {
   Future<bool> isBlocked() async {
     final blockedUntil = await getBlockedUntil();
     return blockedUntil != null && DateTime.now().isBefore(blockedUntil);
+  }
+
+  Future<int> getRemainingSeconds() async {
+    final blockedUntil = await getBlockedUntil();
+    if (blockedUntil == null) return 0;
+    
+    final remaining = blockedUntil.difference(DateTime.now()).inSeconds;
+    return remaining > 0 ? remaining : 0;
   }
 }

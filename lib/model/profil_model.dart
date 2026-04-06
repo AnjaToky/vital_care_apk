@@ -1,4 +1,4 @@
-import 'package:vital_care/DAO/profil_DAO.dart';
+import 'package:vital_care/DAO/profil_dao.dart';
 
 class Profil {
   int? id;

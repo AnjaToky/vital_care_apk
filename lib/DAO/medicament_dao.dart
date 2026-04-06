@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:vital_care/configBdd/datbaseHelper.dart';
+import 'package:vital_care/configBdd/datbase_helper.dart';
 import 'package:vital_care/model/medicament_model.dart';
 import 'package:vital_care/securite/encrypt_service.dart';
 import 'package:vital_care/securite/secure_storage_service.dart';
@@ -35,7 +35,7 @@ class MedicamentDao {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      print('Error occurred while adding medication: $e');
+      //print('Error occurred while adding medication: $e');
       rethrow;
     }
   }
@@ -68,7 +68,7 @@ class MedicamentDao {
         whereArgs: [medicament.id],
       );
     } catch (e) {
-      print('Error occurred while updating medication: $e');
+      //print('Error occurred while updating medication: $e');
       rethrow;
     }
   }
@@ -101,7 +101,7 @@ class MedicamentDao {
           ),
         );
       } catch (e) {
-        print('Error decrypting medication data: $e');
+        //print('Error decrypting medication data: $e');
       }
     }
 

@@ -1,4 +1,4 @@
-import 'package:vital_care/DAO/habitude_DAO.dart';
+import 'package:vital_care/DAO/habitude_dao.dart';
 
 class Habitude {
   int? id;

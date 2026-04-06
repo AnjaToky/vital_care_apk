@@ -1,4 +1,4 @@
-import 'package:vital_care/DAO/medicament_DAO.dart';
+import 'package:vital_care/DAO/medicament_dao.dart';
 
 class Medicament {
   int? id;

@@ -1,5 +1,5 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vital_care/configBdd/datbaseHelper.dart';
+import 'package:vital_care/configBdd/datbase_helper.dart';
 import 'package:vital_care/model/imc_model.dart';
 import 'package:vital_care/securite/encrypt_service.dart';
 import 'package:vital_care/securite/secure_storage_service.dart';
@@ -23,7 +23,7 @@ class ImcDao {
       map['imc_value'] = _encryptService!.encrypt(imc.valuerImc.toString());
       map['created_at'] = _encryptService!.encrypt(imc.createdAt.toIso8601String());
     } catch (e) {
-      print('Error occurred while adding IMC: $e');
+      //print('Error occurred while adding IMC: $e');
       rethrow;
     }
     return await db.insert(
@@ -54,7 +54,7 @@ class ImcDao {
           createdAt: DateTime.parse(decryptedDate),
         ));
       } catch (e) {
-        print('Error occurred while decrypting IMC data: $e');
+        //print('Error occurred while decrypting IMC data: $e');
       }
     }
     return imcDecrypte;

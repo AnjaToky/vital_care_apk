@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:vital_care/configBdd/datbaseHelper.dart';
+import 'package:vital_care/configBdd/datbase_helper.dart';
 import 'package:vital_care/model/habitude_model.dart';
 import 'package:vital_care/securite/encrypt_service.dart';
 import 'package:vital_care/securite/secure_storage_service.dart';
@@ -44,7 +44,7 @@ class HabitudeDao {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      print('Error occurred while adding habit: $e');
+      //print('Error occurred while adding habit: $e');
       rethrow;
     }
   }
@@ -86,7 +86,7 @@ class HabitudeDao {
           createdAt: DateTime.parse(createdAtClair),
         );
       } catch (e) {
-        print('Error decrypting habit data: $e');
+        //print('Error decrypting habit data: $e');
       }
     }
 
