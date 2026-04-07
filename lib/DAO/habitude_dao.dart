@@ -28,14 +28,18 @@ class HabitudeDao {
       map['hydratation'] = _encryptService!.encrypt(
         habitude.hydratation.toString(),
       );
+
+      map['nbr_pas'] = _encryptService!.encrypt(habitude.nbrPas.toString());
+
       map['tension_systolique'] = _encryptService!.encrypt(
         habitude.tensionSystolique.toString(),
       );
+
       map['tenstion_diastolique'] = _encryptService!.encrypt(
         habitude.tenstionDiastolique.toString(),
       );
       map['created_at'] = _encryptService!.encrypt(
-        habitude.createdAt.toIso8601String(),
+        habitude.createdAt.toString(),
       );
 
       return await db.insert(
@@ -44,7 +48,7 @@ class HabitudeDao {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      //print('Error occurred while adding habit: $e');
+      print('Error occurred while adding habit: $e');
       rethrow;
     }
   }
@@ -67,6 +71,9 @@ class HabitudeDao {
         final hydratationClair = _encryptService!.decrypt(
           row['hydratation'] as String,
         );
+
+        final nbrPasClair = _encryptService!.decrypt(row['nbr_pas'] as String);
+        
         final tensionSystoliqueClair = _encryptService!.decrypt(
           row['tension_systolique'] as String,
         );
@@ -76,17 +83,18 @@ class HabitudeDao {
         final createdAtClair = _encryptService!.decrypt(
           row['created_at'] as String,
         );
-        
+
         habitudeDecrypte = Habitude(
           id: row['id'] as int,
           poidHabitude: double.parse(poidHabitudeClair),
           hydratation: double.parse(hydratationClair),
+          nbrPas: int.parse(nbrPasClair),
           tensionSystolique: double.parse(tensionSystoliqueClair),
           tenstionDiastolique: double.parse(tensionDiastoliqueClair),
           createdAt: DateTime.parse(createdAtClair),
         );
       } catch (e) {
-        //print('Error decrypting habit data: $e');
+        print('Error decrypting habit data: $e');
       }
     }
 

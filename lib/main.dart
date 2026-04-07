@@ -7,6 +7,7 @@ import 'package:vital_care/view/ajout_habitude.dart';
 import 'package:vital_care/view/ajout_profil_view.dart';
 import 'package:vital_care/view/auth_guard_view.dart';
 import 'package:vital_care/view/biometric_auth_view.dart';
+import 'package:vital_care/view/habitude_view.dart';
 import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
 

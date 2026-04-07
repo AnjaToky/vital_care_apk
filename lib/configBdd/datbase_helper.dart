@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static const String nomDb = "coche_liste.db";
+  static const String nomDb = "vital_care.db";
   static const int versionDb = 2;
 
   DatabaseHelper._();
@@ -40,13 +40,15 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE habitude (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      poid_habitude TEXT NOT NULL,
-      hydratation TEXT NOT NULL,
-      tension_systolique TEXT NOT NULL,
-      tension_diastolique TEXT NOT NULL
-      created_at TEXT NOT NULL
+      poid_habitude TEXT,
+      hydratation TEXT,
+      nbr_pas TEXT,
+      tension_systolique TEXT,
+      tension_diastolique TEXT, 
+      created_at TEXT
+      )
     )
-  ''');
+    ''');
 
     await db.execute('''
     CREATE TABLE medicament (
@@ -54,7 +56,7 @@ class DatabaseHelper {
       nom TEXT NOT NULL,
       dosage TEXT NOT NULL,
       frequence TEXT NOT NULL,
-      heure TEXT NOT NULL,
+      heure TEXT NOT NULL
     )
   ''');
 
@@ -69,8 +71,8 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE tension (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      tension_systolique TEXT NOT NULL,
-      tension_diastolique TEXT NOT NULL,
+      tension_systo TEXT NOT NULL,
+      tension_diasto TEXT NOT NULL
     )
   ''');
 

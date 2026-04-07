@@ -4,6 +4,7 @@ class Habitude {
   int? id;
   double poidHabitude;
   double hydratation;
+  int nbrPas;
   double tensionSystolique;
   double tenstionDiastolique;
   DateTime createdAt;
@@ -12,16 +13,18 @@ class Habitude {
     this.id,
     required this.poidHabitude,
     required this.hydratation,
+    required this.nbrPas,
     required this.tensionSystolique,
     required this.tenstionDiastolique,
-    DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+    required this.createdAt,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'poid_habitude': poidHabitude,
       'hydratation': hydratation,
+      'nbr_pas': nbrPas,
       'tension_systolique': tensionSystolique,
       'tenstion_diastolique': tenstionDiastolique,
       'created_at': createdAt.toIso8601String(),

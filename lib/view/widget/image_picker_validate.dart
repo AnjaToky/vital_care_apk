@@ -11,7 +11,7 @@ class ImagePickerValidate {
   File? get selectedImage => _selectedImage;
 
   //Utilise le ViewModel pour sélectionner l'image
-  Future<void> pickImage(BuildContext context , WidgetRef ref) async {
+  Future<void> pickImage(BuildContext context, WidgetRef ref) async {
     showModalBottomSheet(
       context: context,
       builder: (context) => SafeArea(
@@ -46,7 +46,7 @@ class ImagePickerValidate {
 
     if (image != null) {
       _selectedImage = image;
-      // ✅ Affiche un aperçu ou une confirmation
+      //Affiche un aperçu ou une confirmation
       print('Image sélectionnée : ${image.path}');
     } else {
       print('Aucune image sélectionnée');
@@ -89,12 +89,12 @@ class ImagePickerValidate {
       //Sauvegarde via le ViewModel
       await ref.read(profilViewModelProvider.notifier).ajouterProfil(profil);
 
-      // if (mounted) {
-      //   ScaffoldMessenger.of(
-      //     context,
-      //   ).showSnackBar(const SnackBar(content: Text('Profil enregistré ✅')));
-      //   Navigator.pop(context);
-      // }
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Profil enregistré ✅')));
+        Navigator.pop(context);
+      }
     }
   }
 }
