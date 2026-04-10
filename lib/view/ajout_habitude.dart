@@ -4,6 +4,8 @@ import 'package:vital_care/model/habitude_model.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view/widget/text_field_view.dart';
 import 'package:vital_care/view_model/habitude_view_model.dart';
+import 'package:vital_care/view_model/imc_view_model.dart';
+import 'package:vital_care/view_model/tension_view_model.dart';
 
 class AjoutHabitude extends ConsumerWidget {
   const AjoutHabitude({super.key});
@@ -18,6 +20,8 @@ class AjoutHabitude extends ConsumerWidget {
     TextFieldView textFieldView = TextFieldView();
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final habitudeNotifier = ref.watch(habitudeViewModelProvider.notifier);
+    final imcNotifire = ref.watch(icmViewModelProvide.notifier);
+    final tensioNotifier = ref.watch(tensionViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
@@ -106,6 +110,14 @@ class AjoutHabitude extends ConsumerWidget {
                         ),
                       ),
                       onPressed: () {
+                        final habitudeAsync = ref.read(
+                          habitudeViewModelProvider,
+                        );
+                        final habitude = habitudeAsync.value;
+                        if (habitude != null) {
+                          habitudeNotifier.supprimerHabitude(habitude!.id!);
+                        }
+
                         if (formKey.currentState!.validate()) {
                           final poisStr = poidController.text;
                           final pasStr = pasController.text;
@@ -129,6 +141,7 @@ class AjoutHabitude extends ConsumerWidget {
                           );
 
                           habitudeNotifier.ajouterHabitude(habitude);
+
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -136,6 +149,9 @@ class AjoutHabitude extends ConsumerWidget {
                               ),
                             );
                           }
+                          imcNotifire.calculerEtAjouterImc();
+                          tensioNotifier.ajouterTensionList();
+                          Navigator.pushNamed(context, '/habitude_view');
                         }
                       },
                       child: Text("Valider"),

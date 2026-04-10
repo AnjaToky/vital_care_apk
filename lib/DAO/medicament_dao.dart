@@ -60,6 +60,7 @@ class MedicamentDao {
       map['heure'] = _encryptService!.encrypt(
         medicament.heure.toIso8601String(),
       );
+      map['status'] = medicament.status.toString().split('.').last;
 
       return await db.update(
         'medicament',
@@ -98,6 +99,10 @@ class MedicamentDao {
             dosage: double.tryParse(dosageClair) ?? 0.0,
             frequence: int.tryParse(frequenceClair) ?? 0,
             heure: DateTime.tryParse(heureClaire) ?? DateTime.now(),
+            status: MedicamentStatus.values.firstWhere(
+              (e) => e.toString().split('.').last == row['status'],
+              orElse: () => MedicamentStatus.enAttente,
+            ),
           ),
         );
       } catch (e) {

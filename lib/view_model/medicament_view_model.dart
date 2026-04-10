@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/model/medicament_model.dart';
 
@@ -12,6 +11,43 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
   Future<List<Medicament>> build() async {
     final medicamentModel = ref.watch(medicamentViewModel);
     return medicamentModel.afficherMedicaments();
+  }
+
+  Future<void> validerMedicament(Medicament medicament) async {
+    final model = ref.read(medicamentViewModel);
+    medicament.status = MedicamentStatus.valider;
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await model.modifierMedicament(medicament);
+      return model.afficherMedicaments();
+    });
+  }
+
+  void verifierMedicamentsManques(List<Medicament> list) {
+    final now = DateTime.now();
+
+    for (var medic in list) {
+      if (medic.status == MedicamentStatus.enAttente &&
+          medic.heure.isBefore(now)) {
+        medic.status = MedicamentStatus.manquer;
+        ref.read(medicamentViewModel).modifierMedicament(medic);
+      }
+    }
+  }
+
+  Medicament? getDernierMedic(List<Medicament> listMadicament) {
+    if (listMadicament.isEmpty) {
+      return Medicament(
+        nom: "Pas de medicament",
+        dosage: 0,
+        frequence: 0,
+        heure: DateTime.now(),
+      );
+    }
+
+    listMadicament.sort((a, b) => a.heure.compareTo(b.heure));
+    return listMadicament.first;
   }
 
   Future<void> ajouterMedicament(Medicament medicament) async {

@@ -8,8 +8,11 @@ import 'package:vital_care/view/ajout_profil_view.dart';
 import 'package:vital_care/view/auth_guard_view.dart';
 import 'package:vital_care/view/biometric_auth_view.dart';
 import 'package:vital_care/view/habitude_view.dart';
+import 'package:vital_care/view/historique_view.dart';
+import 'package:vital_care/view/home_view.dart';
 import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
+import 'package:vital_care/view/urgence_view.dart';
 
 void main() {
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
@@ -28,12 +31,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Vital Care',
-      home: AjoutHabitude(),
+      home: ProfilView(),
       //initialRoute: '/profil',
       routes: {
         '/profil': (context) => ProfilView(),
-        '/ajout': (context) => const AuthGuardView(child: AjoutProfilView()),
-        '/medicament': (context) => const AuthGuardView(child: MedicamentView()),
+        '/ajout_profil': (context) => AjoutProfilView(),
+        '/medicament': (context) => MedicamentView(),
+        '/habitude_view': (context) => HabitudeView(),
+        '/ajout_habitude': (context) => AjoutHabitude(),
+        '/home': (context) => HomeView(),
+        '/urgence': (context) => UrgenceView(),
+        '/historique': (context) => HistoriqueView(),
+        '/biometrie': (context) =>
+            const AuthGuardView(child: BiometricAuthView()),
       },
     );
   }

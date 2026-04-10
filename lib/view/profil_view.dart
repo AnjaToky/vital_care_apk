@@ -16,9 +16,27 @@ class ProfilView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Couleur.backgroundColor,
+        title: const Text(
+          'Profil',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Couleur.primaryColor,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
+            Container(
+              color: Couleur.backgroundColor,
+              child: Column(children: [
+                  
+                ],
+              ),
+            ),
             Expanded(
               child: profilAsync.when(
                 data: (profil) {
@@ -26,38 +44,35 @@ class ProfilView extends ConsumerWidget {
                     return const Center(
                       child: Text(
                         'Aucun profil trouvé',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Couleur.backgroundColor),
                       ),
                     );
                   }
 
                   return SingleChildScrollView(
                     child: Container(
-                      margin: const EdgeInsets.all(16),
-                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8F4F8),
+                        color: Couleur.backgroundColor,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Profil',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF1976D2),
-                            ),
+                          Container(
+                            height: 2,
+                            width: double.infinity,
+                            color: Couleur.butttonPrimaryColor,
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 24),
 
                           // Photo et info utilisateur
                           Row(
                             children: [
                               CircleAvatar(
                                 radius: 40,
-                                backgroundColor: Colors.grey[300],
+                                backgroundColor: Couleur.backgroundColor,
                                 backgroundImage: profil.image != null
                                     ? FileImage(File(profil.image!))
                                     : null,
@@ -95,6 +110,12 @@ class ProfilView extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(height: 24),
+                          Container(
+                            height: 2,
+                            width: double.infinity,
+                            color: Couleur.butttonPrimaryColor,
+                          ),
+                          const SizedBox(height: 24),
 
                           // Cards d'informations
                           _buildInfoCard('Nom', profil.name),
@@ -128,11 +149,11 @@ class ProfilView extends ConsumerWidget {
               ),
             ),
 
-            // Bottom Navigation Bar
-            bottomNavBar.buildBottomNavBar(context),
+            // Bottom Navigation
           ],
         ),
       ),
+      bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),
     );
   }
 

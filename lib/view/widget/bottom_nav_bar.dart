@@ -1,85 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view_model/medicament_view_model.dart';
 
 class BottomNavBar {
+  Widget buildBottomNavBar(BuildContext context, WidgetRef ref) {
+    final currentRoute = ModalRoute.of(context)?.settings.name;
 
-    Widget buildBottomNavBar(BuildContext context) {
+    Widget buildItem(String route, String iconPath, {VoidCallback? onTap}) {
+      final isSelected = currentRoute == route;
+
+      return Expanded(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isSelected
+                ? Couleur.primaryColor
+                : Couleur.backgroundColor,
+            elevation: 0,
+          ),
+          onPressed: () {
+            if (currentRoute != route) {
+              Navigator.pushReplacementNamed(context, route);
+            }
+            if (onTap != null) onTap();
+          },
+          child: SvgPicture.asset(
+            iconPath,
+            color: isSelected ? Couleur.backgroundColor : Couleur.textColor,
+          ),
+        ),
+      );
+    }
+
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
+      margin: EdgeInsets.only(right: 0, left: 0, top: 8, bottom: 8),
+      decoration: BoxDecoration(color: Couleur.backgroundColor),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(Icons.home_outlined, 'Home', false, () {}),
-              _buildNavItem(Icons.person, 'Profil', true, () {}),
-              _buildNavItem(
-                Icons.medical_services_outlined,
-                'Traitement',
-                false,
-                () {},
-              ),
-              _buildNavItem(Icons.history, 'Historique', false, () {}),
-              _buildNavItem(
-                Icons.warning_amber_outlined,
-                'Urgence',
-                false,
-                () {},
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-
-  Widget _buildNavItem(
-    IconData icon,
-    String label,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1976D2) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : Colors.black87,
-              size: 24,
+            buildItem(
+              '/home',
+              "assets/icon/home_icon.svg",
+              onTap: () {
+                ref
+                    .read(medicamentViewModelProvider.notifier)
+                    .actualiserMedicaments();
+              },
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black87,
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
+            buildItem('/profil', "assets/icon/profil_icon.svg"),
+            buildItem('/medicament', "assets/icon/medicament_icon.svg"),
+            buildItem('/historique', "assets/icon/historique_icon.svg"),
+            buildItem('/urgence', "assets/icon/urgence_icon.svg"),
           ],
         ),
       ),
     );
   }
-
-
 }

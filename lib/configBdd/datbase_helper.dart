@@ -40,15 +40,14 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE habitude (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      poid_habitude TEXT,
-      hydratation TEXT,
-      nbr_pas TEXT,
-      tension_systolique TEXT,
-      tension_diastolique TEXT, 
-      created_at TEXT
-      )
+      poid_habitude TEXT NOT NULL,
+      hydratation TEXT NOT NULL,
+      nbr_pas TEXT NOT NULL,
+      tension_systolique TEXT NOT NULL,
+      tension_diastolique TEXT NOT NULL, 
+      created_at TEXT NOT NULL
     )
-    ''');
+  ''');
 
     await db.execute('''
     CREATE TABLE medicament (
@@ -56,7 +55,8 @@ class DatabaseHelper {
       nom TEXT NOT NULL,
       dosage TEXT NOT NULL,
       frequence TEXT NOT NULL,
-      heure TEXT NOT NULL
+      heure TEXT NOT NULL,
+      status TEXT
     )
   ''');
 
@@ -71,8 +71,9 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE tension (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      tension_systo TEXT NOT NULL,
-      tension_diasto TEXT NOT NULL
+      tension_systolique TEXT NOT NULL,
+      tension_diastolique TEXT NOT NULL,
+      created_at TEXT NOT NULL
     )
   ''');
 

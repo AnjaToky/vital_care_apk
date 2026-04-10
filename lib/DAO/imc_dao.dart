@@ -23,7 +23,7 @@ class ImcDao {
       map['imc_value'] = _encryptService!.encrypt(imc.valuerImc.toString());
       map['created_at'] = _encryptService!.encrypt(imc.createdAt.toIso8601String());
     } catch (e) {
-      //print('Error occurred while adding IMC: $e');
+      print('Error occurred while adding IMC: $e');
       rethrow;
     }
     return await db.insert(
@@ -54,7 +54,7 @@ class ImcDao {
           createdAt: DateTime.parse(decryptedDate),
         ));
       } catch (e) {
-        //print('Error occurred while decrypting IMC data: $e');
+        print('Error occurred while decrypting IMC data: $e');
       }
     }
     return imcDecrypte;

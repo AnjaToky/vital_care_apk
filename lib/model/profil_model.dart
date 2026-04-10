@@ -18,7 +18,7 @@ class Profil {
     required this.poids,
     required this.allergies,
     required this.traitements,
-    required this.image, required,
+    required this.image
   });
 
   Map<String, dynamic> toMap() {

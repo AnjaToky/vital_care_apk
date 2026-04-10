@@ -166,17 +166,20 @@ class AjoutProfilView extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => imagePickerValidate.valider(
-                        ref,
-                        context,
-                        formKey,
-                        nomController,
-                        ageController,
-                        tailleController,
-                        poidController,
-                        allergieController,
-                        traitementController,
-                      ),
+                      onPressed: () {
+                        imagePickerValidate.valider(
+                          ref,
+                          context,
+                          formKey,
+                          nomController,
+                          ageController,
+                          tailleController,
+                          poidController,
+                          allergieController,
+                          traitementController,
+                        );
+                        Navigator.pushNamed(context, '/profil');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1976D2),
                         padding: const EdgeInsets.symmetric(vertical: 14),

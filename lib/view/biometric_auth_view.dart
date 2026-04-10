@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/securite/auth_service.dart';
 import 'package:vital_care/view_model/auth_view_model.dart';
+import 'package:vital_care/view_model/profil_view_model.dart';
 
 class BiometricAuthView extends ConsumerStatefulWidget {
   const BiometricAuthView({super.key});
@@ -36,10 +37,27 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
 
   Future<void> _authenticate() async {
     final success = await ref.read(authProvider.notifier).authenticate();
-    
-    if (success && mounted) {
-      // Navigation vers la page principale
-      Navigator.pushNamed(context, '/profil');
+
+    if (!mounted) return;
+
+    final profilAsync = ref.read(profilViewModelProvider);
+
+    if (success) {
+      profilAsync.when(
+        data: (profil) {
+          if (profil != null) {
+            Navigator.pushNamed(context, '/home');
+          } else {
+            Navigator.pushNamed(context, '/ajout_profil');
+          }
+        },
+        loading: () {
+          // Optionnel : afficher un loader
+        },
+        error: (e, _) {
+          // Gérer erreur
+        },
+      );
     }
   }
 
@@ -66,7 +84,9 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                   child: Icon(
                     authState.isBlocked ? Icons.lock : Icons.fingerprint,
                     size: 80,
-                    color: authState.isBlocked ? Colors.red : const Color(0xFF1976D2),
+                    color: authState.isBlocked
+                        ? Colors.red
+                        : const Color(0xFF1976D2),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -92,10 +112,7 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                     ),
                     child: Text(
                       authState.errorMessage!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -114,10 +131,7 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                   const SizedBox(height: 8),
                   const Text(
                     'Réessayez après',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
 
@@ -126,10 +140,7 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                   const SizedBox(height: 24),
                   Text(
                     'Tentatives restantes: ${AuthService.maxAttempts - authState.failedAttempts}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
 

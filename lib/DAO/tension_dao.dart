@@ -20,14 +20,17 @@ class TensionDao {
     final db = await dbProvider.database;
     final map = tension.toMap();
     try {
-      map['tension_systoloque'] = _encryptService!.encrypt(
+      map['tension_systolique'] = _encryptService!.encrypt(
         tension.tensionSystolique.toString(),
       );
       map['tension_diastolique'] = _encryptService!.encrypt(
         tension.tensionDiastolique.toString(),
       );
+      map['created_at'] = _encryptService!.encrypt(
+        tension.createdAt.toIso8601String(),
+      );
     } catch (e) {
-      //print('Error occurred while adding tension: $e');
+      print('Error occurred while adding tension: $e');
       rethrow;
     }
     return await db.insert(
@@ -51,10 +54,13 @@ class TensionDao {
     for (var row in result) {
       try {
         final decryptedSystolique = _encryptService!.decrypt(
-          row['tension_systoloque'] as String,
+          row['tension_systolique'] as String,
         );
         final decryptedDiastolique = _encryptService!.decrypt(
           row['tension_diastolique'] as String,
+        );
+        final decryptedDate = _encryptService!.decrypt(
+          row['created_at'] as String,
         );
 
         tensionDecrypte.add(
@@ -62,10 +68,11 @@ class TensionDao {
             id: row['id'] as int,
             tensionSystolique: double.parse(decryptedSystolique),
             tensionDiastolique: double.parse(decryptedDiastolique),
+            createdAt: DateTime.parse(decryptedDate),
           ),
         );
       } catch (e) {
-        //print('Error occurred while decrypting tension data: $e');
+        print('Error occurred while decrypting tension data: $e');
       }
     }
     return tensionDecrypte;

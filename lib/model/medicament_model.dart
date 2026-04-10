@@ -1,13 +1,15 @@
 import 'package:vital_care/DAO/medicament_dao.dart';
 
+enum MedicamentStatus { enAttente, valider, manquer }
+
 class Medicament {
   int? id;
   String nom;
   double dosage;
   int frequence;
   DateTime heure;
-  bool estPris;
-  bool estManque = false;
+  MedicamentStatus status;
+  
 
   Medicament({
     this.id,
@@ -15,8 +17,7 @@ class Medicament {
     required this.dosage,
     required this.frequence,
     required this.heure,
-    this.estPris = false,
-    this.estManque = false,
+    this.status = MedicamentStatus.enAttente,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +27,7 @@ class Medicament {
       'dosage': dosage,
       'frequence': frequence,
       'heure': heure.toIso8601String(),
+      'status': status.toString().split('.').last,
     };
   }
 }

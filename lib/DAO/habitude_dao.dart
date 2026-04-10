@@ -35,7 +35,7 @@ class HabitudeDao {
         habitude.tensionSystolique.toString(),
       );
 
-      map['tenstion_diastolique'] = _encryptService!.encrypt(
+      map['tension_diastolique'] = _encryptService!.encrypt(
         habitude.tenstionDiastolique.toString(),
       );
       map['created_at'] = _encryptService!.encrypt(
@@ -78,7 +78,7 @@ class HabitudeDao {
           row['tension_systolique'] as String,
         );
         final tensionDiastoliqueClair = _encryptService!.decrypt(
-          row['tenstion_diastolique'] as String,
+          row['tension_diastolique'] as String,
         );
         final createdAtClair = _encryptService!.decrypt(
           row['created_at'] as String,

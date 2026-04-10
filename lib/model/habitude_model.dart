@@ -26,7 +26,7 @@ class Habitude {
       'hydratation': hydratation,
       'nbr_pas': nbrPas,
       'tension_systolique': tensionSystolique,
-      'tenstion_diastolique': tenstionDiastolique,
+      'tension_diastolique': tenstionDiastolique,
       'created_at': createdAt.toIso8601String(),
     };
   }

@@ -19,6 +19,16 @@ class HabitudeViewModel extends AsyncNotifier<Habitude?> {
     });
   }
 
+
+  Future <void> supprimerHabitude(int id) async{
+    final habitudeModel = ref.read(habitudeViewModel);
+    state = const AsyncValue.loading();
+    state  = await AsyncValue.guard(()async{
+      await habitudeModel.supprimerHabitude(id);
+      return habitudeModel.afficherHabitude();
+    });
+  }
+
   Future<void> actualiserHabitude() async {
     final habitudeModel = ref.read(habitudeViewModel);
     state = const AsyncValue.loading();
