@@ -8,7 +8,7 @@ import 'package:vital_care/view/ajout_profil_view.dart';
 import 'package:vital_care/view/auth_guard_view.dart';
 import 'package:vital_care/view/biometric_auth_view.dart';
 import 'package:vital_care/view/habitude_view.dart';
-import 'package:vital_care/view/historique_view.dart';
+import 'package:vital_care/view/historique_imc_view.dart';
 import 'package:vital_care/view/home_view.dart';
 import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Vital Care',
-      home: ProfilView(),
+      home: BiometricAuthView(),
       //initialRoute: '/profil',
       routes: {
         '/profil': (context) => ProfilView(),
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/ajout_habitude': (context) => AjoutHabitude(),
         '/home': (context) => HomeView(),
         '/urgence': (context) => UrgenceView(),
-        '/historique': (context) => HistoriqueView(),
+        '/historique': (context) => HistoriqueImcView(),
         '/biometrie': (context) =>
             const AuthGuardView(child: BiometricAuthView()),
       },

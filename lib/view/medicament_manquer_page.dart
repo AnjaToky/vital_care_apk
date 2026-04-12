@@ -19,12 +19,10 @@ class MedicamentManquerPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
-      appBar: AppBar(
-        title: Text("Médicaments manqués"),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: appBarView.appBarPage("Médicaments manqués"),
       body: Column(
         children: [
+          SizedBox(height: 16),
           appBarView.appBarMadicament(context, 2, Couleur.accentColor),
           data.when(
             data: (list) {

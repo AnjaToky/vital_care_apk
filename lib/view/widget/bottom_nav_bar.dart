@@ -15,8 +15,8 @@ class BottomNavBar {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: isSelected
-                ? Couleur.primaryColor
-                : Couleur.backgroundColor,
+                ? Couleur.backgroundColor
+                : Couleur.primaryColor,
             elevation: 0,
           ),
           onPressed: () {
@@ -27,18 +27,19 @@ class BottomNavBar {
           },
           child: SvgPicture.asset(
             iconPath,
-            color: isSelected ? Couleur.backgroundColor : Couleur.textColor,
+            color: isSelected ? Couleur.textColor : Couleur.backgroundColor,
           ),
         ),
       );
     }
 
     return Container(
-      margin: EdgeInsets.only(right: 0, left: 0, top: 8, bottom: 8),
-      decoration: BoxDecoration(color: Couleur.backgroundColor),
+      margin: EdgeInsets.only(right: 0, left: 0, top: 0, bottom: 0),
+      padding: EdgeInsets.only(right: 0, left: 0, top: 8, bottom: 8),
+      decoration: BoxDecoration(color: Couleur.primaryColor),
       child: SafeArea(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          spacing: 0,
           children: [
             buildItem(
               '/home',

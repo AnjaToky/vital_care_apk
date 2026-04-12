@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view/habitude_view.dart';
 import 'package:vital_care/view/widget/image_picker_validate.dart';
 import 'package:vital_care/view/widget/text_field_view.dart';
 
@@ -178,10 +179,10 @@ class AjoutProfilView extends ConsumerWidget {
                           allergieController,
                           traitementController,
                         );
-                        Navigator.pushNamed(context, '/profil');
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HabitudeView()));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1976D2),
+                        backgroundColor: Couleur.butttonPrimaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),

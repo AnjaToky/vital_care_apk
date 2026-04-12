@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
 import 'package:vital_care/view_model/habitude_view_model.dart';
 import 'package:vital_care/view_model/imc_view_model.dart';
 import 'package:vital_care/view_model/profil_view_model.dart';
 
 class HabitudeView extends ConsumerWidget {
-  const HabitudeView({Key? key}) : super(key: key);
+  const HabitudeView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,8 +17,10 @@ class HabitudeView extends ConsumerWidget {
     final profilAsync = ref.watch(profilViewModelProvider);
     final imcAsync = ref.watch(icmViewModelProvide);
     BottomNavBar bottomNavBar = BottomNavBar();
+    AppBarView appBarView = AppBarView();
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      appBar: appBarView.appBarPage("Prise quotidienne"),
+      backgroundColor: Couleur.backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -42,24 +46,13 @@ class HabitudeView extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Titre
-                                const Text(
-                                  'Habitude',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1976D2),
-                                  ),
-                                ),
-                                const Divider(thickness: 2),
                                 const SizedBox(height: 16),
 
                                 // Date
                                 Text(
                                   'Dernière mise à jour: ${DateFormat('dd MMMM yyyy, HH:mm').format(habitude.createdAt)}',
                                   style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
                                     color: Color(0xFF1976D2),
                                   ),
                                 ),
@@ -88,11 +81,6 @@ class HabitudeView extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 12),
 
-                                // _buildHabitudeCard(
-                                //   label: 'IMC',
-                                //   value: imc > 0 ? imc.toStringAsFixed(0) : 'N/A',
-                                //   icon: Icons.person_outline,
-                                // )
                                 _buildHabitudeCard(
                                   label: 'IMC',
                                   value: lastImc != null
@@ -134,8 +122,9 @@ class HabitudeView extends ConsumerWidget {
       ),
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Couleur.backgroundColor,
         onPressed: () => Navigator.pushNamed(context, '/ajout_habitude'),
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: Couleur.butttonPrimaryColor),
       ),
     );
   }
@@ -149,7 +138,7 @@ class HabitudeView extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1976D2),
+        color: Couleur.cardBackgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -163,7 +152,7 @@ class HabitudeView extends ConsumerWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Couleur.backgroundColor,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -172,13 +161,13 @@ class HabitudeView extends ConsumerWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Couleur.backgroundColor,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(icon, size: 60, color: Colors.white.withOpacity(0.9)),
+          Icon(icon, size: 30, color: Couleur.backgroundColor),
         ],
       ),
     );

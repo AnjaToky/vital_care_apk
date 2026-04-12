@@ -21,10 +21,11 @@ class MedicamentView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
-      appBar: AppBar(title: const Text("Traitements")),
+      appBar: appBarView.appBarPage("Traitement"),
 
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
+        backgroundColor: Couleur.backgroundColor,
+        child: const Icon(Icons.add, color: Couleur.cardBackgroundColor),
         onPressed: () {
           dialogView.showDialogMadicaments(context, ref);
         },
@@ -32,6 +33,7 @@ class MedicamentView extends ConsumerWidget {
 
       body: Column(
         children: [
+          SizedBox(height: 16,),
           appBarView.appBarMadicament(context, 0, Couleur.cardBackgroundColor),
           medicamentAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
@@ -79,12 +81,17 @@ class MedicamentView extends ConsumerWidget {
                               Couleur.cardBackgroundColor,
                             ),
 
-                            containerResult.bouttonValider(() {
-                              ref
-                                  .read(medicamentViewModelProvider.notifier)
-                                  .validerMedicament(m);
-                            }),
-                            SizedBox(height: 8),
+                            containerResult.bouttonValider(
+                              () {
+                                ref
+                                    .read(medicamentViewModelProvider.notifier)
+                                    .validerMedicament(m);
+                              },
+                              Couleur.buttonSecondaryColor,
+                              300,
+                              "Valider",
+                            ),
+                            SizedBox(height: 16),
                           ],
                         ),
                       ),

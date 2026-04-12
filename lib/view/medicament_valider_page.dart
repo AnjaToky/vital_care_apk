@@ -10,7 +10,6 @@ import 'package:vital_care/view_model/medicament_view_model.dart';
 class MedicamentValiderPage extends ConsumerWidget {
   const MedicamentValiderPage({super.key});
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(medicamentViewModelProvider);
@@ -20,13 +19,11 @@ class MedicamentValiderPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
-      appBar: AppBar(
-        title: Text("Médicaments validés"),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: appBarView.appBarPage("Médicaments validés"),
       body: Column(
         children: [
-          appBarView.appBarMadicament(context, 1,Couleur.buttonSecondaryColor),
+          SizedBox(height: 16),
+          appBarView.appBarMadicament(context, 1, Couleur.buttonSecondaryColor),
           data.when(
             data: (list) {
               final valides = list

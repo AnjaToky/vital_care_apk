@@ -3,21 +3,26 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 
 class ContainerResult {
-  Widget bouttonValider(VoidCallback valideMedic) {
+  Widget bouttonValider(
+    VoidCallback valideMedic,
+    Color buttonColor,
+    double buttonWidth,
+    String titre,
+  ) {
     return SizedBox(
-      width: 300,
+      width: buttonWidth,
       child: ElevatedButton(
         onPressed: valideMedic,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Couleur.buttonSecondaryColor,
+          backgroundColor: buttonColor,
           padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
         ),
-        child: const Text(
-          'Valider',
+        child: Text(
+          titre,
           style: TextStyle(
             color: Couleur.textSecondaryColor,
             fontSize: 16,
@@ -92,12 +97,14 @@ class ContainerResult {
     required String value,
     required String heure,
     required IconData icon,
+    required Color backColor,
+    required String interpertation,
   }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1976D2),
+        color: backColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -109,7 +116,7 @@ class ContainerResult {
                 Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -118,24 +125,59 @@ class ContainerResult {
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    fontSize: 16,
+                    color: Couleur.backgroundColor,
                   ),
                 ),
 
                 Text(
                   heure,
                   style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    fontSize: 16,
+                    color: Couleur.backgroundColor,
+                  ),
+                ),
+
+                Text(
+                  interpertation,
+                  style: TextStyle(
+                    color: Couleur.backgroundColor,
+                    fontSize: 16,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(icon, size: 60, color: Colors.white.withOpacity(0.9)),
+          Icon(icon, size: 30, color: Couleur.backgroundColor),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInfoCard(String label, String value) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Couleur.cardBackgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, color: Colors.white70),
+          ),
         ],
       ),
     );

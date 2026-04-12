@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/model/imc_model.dart';
-import 'package:vital_care/view_model/habitude_view_model.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view_model/profil_view_model.dart';
 
 final imcModelProvider = Provider<ImcModel>((ref) => ImcModel());
@@ -13,12 +14,23 @@ class ImcViewModel extends AsyncNotifier<List<Imc>> {
   }
 
   Imc? getDernierImc(List<Imc> list) {
-    if (list.isEmpty){
+    if (list.isEmpty) {
       return Imc(valuerImc: 0, createdAt: DateTime.now());
     }
 
     list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     return list.last;
+  }
+
+  double moyenneImc(List<Imc> imcList) {
+    double somme = 0;
+    for (int i = 0; i < imcList.length; i++) {
+      somme = somme + imcList[i].valuerImc;
+    }
+
+    double moyenneImc = somme / imcList.length;
+
+    return moyenneImc;
   }
 
   double calculeImc(double poid, double taille) {
@@ -27,18 +39,61 @@ class ImcViewModel extends AsyncNotifier<List<Imc>> {
     return poid / (tailleEnMetres * tailleEnMetres);
   }
 
-  Future<void> calculerEtAjouterImc() async {
-    final habitudeAsync = ref.read(habitudeViewModelProvider);
-    final profilAsync = ref.read(profilViewModelProvider);
+  String interpreterIMC(double imc) {
+    if (imc < 18.5) return 'Insuffisance pondérale';
+    if (imc < 25) return 'Poids normal';
+    if (imc < 30) return 'Surpoids';
+    if (imc < 35) return 'Obésité modérée';
+    if (imc < 40) return 'Obésité sévère';
+    return 'Obésité morbide';
+  }
 
-    final habitude = habitudeAsync.value;
+  Color couleurIMC(double imc) {
+    if (imc < 18.5) return Colors.orange;
+    if (imc < 25) return Couleur.secondaryColor;
+    if (imc < 30) return Colors.orange;
+    return Couleur.accentColor;
+  }
+
+  String moisImc(int mois) {
+    switch (mois) {
+      case 1:
+        return "Janvier";
+      case 2:
+        return "Février";
+      case 3:
+        return "Mars";
+      case 4:
+        return "Avril";
+      case 5:
+        return "Mey";
+      case 6:
+        return "Juin";
+      case 7:
+        return "Juillet";
+      case 8:
+        return "Aôut";
+      case 9:
+        return "Septembre";
+      case 10:
+        return "Octobre";
+      case 11:
+        return "Novembre";
+      case 12:
+        return "Decembre";
+    }
+    return 'null';
+  }
+
+  Future<void> calculerEtAjouterImc(double poidHabitude) async {
+    final profilAsync = ref.read(profilViewModelProvider);
     final profil = profilAsync.value;
 
-    if (habitude == null || profil == null) {
+    if (profil == null) {
       throw Exception("Données manquantes");
     }
 
-    final imcValue = calculeImc(habitude.poidHabitude, profil.taille);
+    double imcValue = calculeImc(poidHabitude, profil.taille);
 
     final nouvelImc = Imc(valuerImc: imcValue, createdAt: DateTime.now());
 

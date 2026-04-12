@@ -5,7 +5,7 @@ import 'package:vital_care/securite/auth_service.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 
-// Notifier pour gérer l'état
+
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService _authService;
 

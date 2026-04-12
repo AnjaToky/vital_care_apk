@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/securite/auth_service.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view_model/auth_view_model.dart';
 import 'package:vital_care/view_model/profil_view_model.dart';
 
@@ -66,7 +67,7 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1976D2),
+      backgroundColor: Couleur.cardBackgroundColor,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -85,7 +86,7 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                     authState.isBlocked ? Icons.lock : Icons.fingerprint,
                     size: 80,
                     color: authState.isBlocked
-                        ? Colors.red
+                        ? Colors.red  
                         : const Color(0xFF1976D2),
                   ),
                 ),

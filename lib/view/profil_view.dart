@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
+import 'package:vital_care/view/widget/container_result.dart';
 import 'dart:io';
 
 import 'package:vital_care/view_model/profil_view_model.dart';
@@ -13,20 +15,12 @@ class ProfilView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profilAsync = ref.watch(profilViewModelProvider);
     BottomNavBar bottomNavBar = BottomNavBar();
+    ContainerResult containerResult = ContainerResult();
+    AppBarView appBarView = AppBarView();
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Couleur.backgroundColor,
-        title: const Text(
-          'Profil',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Couleur.primaryColor,
-          ),
-        ),
-      ),
+      appBar: appBarView.appBarPage("Profil"),
       body: SafeArea(
         child: Column(
           children: [
@@ -118,22 +112,22 @@ class ProfilView extends ConsumerWidget {
                           const SizedBox(height: 24),
 
                           // Cards d'informations
-                          _buildInfoCard('Nom', profil.name),
+                          containerResult.buildInfoCard('Nom', profil.name),
                           const SizedBox(height: 12),
 
-                          _buildInfoCard('Âge', '${profil.age}'),
+                          containerResult.buildInfoCard('Âge', '${profil.age}'),
                           const SizedBox(height: 12),
 
-                          _buildInfoCard('Poid (kg)', '${profil.poids}'),
+                          containerResult.buildInfoCard('Poid (kg)', '${profil.poids}'),
                           const SizedBox(height: 12),
 
-                          _buildInfoCard('Taille (cm)', '${profil.taille}'),
+                          containerResult.buildInfoCard('Taille (cm)', '${profil.taille}'),
                           const SizedBox(height: 12),
 
-                          _buildInfoCard('Allergie', profil.allergies),
+                          containerResult.buildInfoCard('Allergie', profil.allergies),
                           const SizedBox(height: 12),
 
-                          _buildInfoCard('Traitement', profil.traitements),
+                          containerResult.buildInfoCard('Traitement', profil.traitements),
                         ],
                       ),
                     ),
@@ -154,35 +148,6 @@ class ProfilView extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),
-    );
-  }
-
-  Widget _buildInfoCard(String label, String value) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1976D2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 14, color: Colors.white70),
-          ),
-        ],
-      ),
     );
   }
 }

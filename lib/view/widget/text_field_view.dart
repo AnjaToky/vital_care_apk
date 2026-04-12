@@ -19,7 +19,7 @@ class TextFieldView {
         style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: Color(0xFF1976D2),
+          color: Couleur.butttonPrimaryColor,
         ),
       ),
     );

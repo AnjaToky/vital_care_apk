@@ -36,8 +36,14 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
     }
   }
 
-  Medicament? getDernierMedic(List<Medicament> listMadicament) {
-    if (listMadicament.isEmpty) {
+  Medicament getDernierMedic(List<Medicament> listMadicament) {
+    // 1. Filtrer les médicaments en attente
+    final enAttente = listMadicament
+        .where((m) => m.status == MedicamentStatus.enAttente)
+        .toList();
+
+    // 2. Vérifier si vide
+    if (enAttente.isEmpty) {
       return Medicament(
         nom: "Pas de medicament",
         dosage: 0,
@@ -46,8 +52,11 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
       );
     }
 
-    listMadicament.sort((a, b) => a.heure.compareTo(b.heure));
-    return listMadicament.first;
+    // 3. Trier
+    enAttente.sort((a, b) => a.heure.compareTo(b.heure));
+
+    // 4. Retourner le plus proche
+    return enAttente.first;
   }
 
   Future<void> ajouterMedicament(Medicament medicament) async {
