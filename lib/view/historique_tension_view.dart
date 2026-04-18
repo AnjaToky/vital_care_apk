@@ -4,9 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vital_care/model/tension_model.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view/pdf/fonction_pdf.dart';
 import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
 import 'package:vital_care/view/widget/container_result.dart';
+import 'package:vital_care/view_model/imc_view_model.dart';
+import 'package:vital_care/view_model/medicament_view_model.dart';
+import 'package:vital_care/view_model/profil_view_model.dart';
 import 'package:vital_care/view_model/tension_view_model.dart';
 
 class HistoriqueTensionView extends ConsumerWidget {
@@ -32,14 +36,14 @@ class HistoriqueTensionView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 16),
-            
+
                 appBarView.appBarHistorique(
                   context,
                   1,
                   Couleur.cardBackgroundColor,
                 ),
                 SizedBox(height: 16),
-            
+
                 const Text(
                   'Évolution de la Tension',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -68,7 +72,7 @@ class HistoriqueTensionView extends ConsumerWidget {
                     final tensionDate = tensionAlter.moisTension(
                       DateTime.now().month,
                     );
-            
+
                     final intepretation = tensionAlter.interpreterTension(
                       systolique,
                       diastolique,
@@ -77,7 +81,7 @@ class HistoriqueTensionView extends ConsumerWidget {
                       systolique,
                       diastolique,
                     );
-            
+
                     if (tensionList.isEmpty) {
                       return const Center(
                         child: Padding(
@@ -86,7 +90,7 @@ class HistoriqueTensionView extends ConsumerWidget {
                         ),
                       );
                     }
-            
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -94,16 +98,19 @@ class HistoriqueTensionView extends ConsumerWidget {
                           height: 250,
                           child: LineChart(_buildTensionChartData(tensionList)),
                         ),
-                    
+
                         SizedBox(height: 16),
-                    
+
                         containerResult.buildHabitudeCard(
                           label: "Moyenne Tension",
                           value: "${systolique.toInt()}/${diastolique.toInt()}",
-                          heure: "${DateTime.now().day}/${tensionDate.toString()}",
-                          icon: Icons.heart_broken,
-                          backColor: couleurTension,
-                          interpertation: intepretation,
+                          //heure:
+                          //"${DateTime.now().day}/${tensionDate.toString()}",
+                          iconHabitude: "assets/icon/tension.svg",
+                          widgetColor: containerResult.buildImcCard(
+                            containerColor: couleurTension,
+                            interpretation: intepretation,
+                          ),
                         ),
                       ],
                     );
@@ -114,12 +121,91 @@ class HistoriqueTensionView extends ConsumerWidget {
                       child: CircularProgressIndicator(),
                     ),
                   ),
-                  error: (error, stack) => Center(child: Text('Erreur: $error')),
+                  error: (error, stack) =>
+                      Center(child: Text('Erreur: $error')),
                 ),
               ],
             ),
           ),
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Couleur.backgroundColor,
+
+        onPressed: () async {
+          try {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(child: CircularProgressIndicator()),
+            );
+
+            final profilAsync = ref.watch(profilViewModelProvider);
+            final imcAsync = ref.watch(icmViewModelProvide);
+            final medicamentAsync = ref.watch(medicamentViewModelProvider);
+            final tensionasync = ref.watch(tensionViewModelProvider);
+            FonctionPdf pdf = FonctionPdf();
+
+            profilAsync.when(
+              data: (profil) {
+                return imcAsync.when(
+                  data: (imcList) {
+                    return medicamentAsync.when(
+                      data: (medicamentEnAtente) {
+                        return tensionasync.when(
+                          data: (tensionList) {
+                            pdf.generateHealthPdf(
+                              profil: profil,
+                              imcList: imcList,
+                              medicaments: medicamentEnAtente,
+                              tension: tensionList,
+                            );
+                          },
+                          error: (e, s) => "",
+                          loading: () => "",
+                        );
+                      },
+                      error: (e, s) => "",
+                      loading: () => "",
+                    );
+                  },
+                  error: (e, s) => "",
+                  loading: () => "",
+                );
+              },
+              error: (e, s) => "",
+              loading: () => "",
+            );
+
+            Navigator.pop(context); // fermer loader
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                elevation: 1,
+                backgroundColor: Couleur.buttonSecondaryColor,
+                content: Text(
+                  "PDF généré avec succès ",
+                  style: TextStyle(color: Couleur.backgroundColor),
+                ),
+              ),
+            );
+          } catch (e) {
+            Navigator.pop(context);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Couleur.accentColor,
+                content: Text(
+                  "Erreur lors de l'export",
+                  style: TextStyle(color: Couleur.backgroundColor),
+                ),
+              ),
+            );
+          }
+        },
+        icon: Icon(Icons.download),
+        label: Text("Exporter PDF", style: TextStyle(color: Couleur.textColor)),
       ),
 
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),

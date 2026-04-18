@@ -3,6 +3,32 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 
 class ContainerResult {
+  Widget buildIconButton({required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Couleur.butttonPrimaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: SvgPicture.asset(
+          "assets/icon/check.svg",
+          color: Couleur.backgroundColor,
+        ),
+      ),
+    );
+  }
+
+  Widget buildIconStatus({required String icon, required Color iconColor}) {
+    return Container(
+      decoration: BoxDecoration(color: Couleur.backgroundColor),
+      child: SvgPicture.asset(icon, color: iconColor, width: 16, height: 16),
+    );
+  }
+
   Widget bouttonValider(
     VoidCallback valideMedic,
     Color buttonColor,
@@ -38,54 +64,141 @@ class ContainerResult {
     String dosage,
     String frequence,
     String heure,
-    Color fontColor,
+    Widget iconWidget,
   ) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: fontColor, // Bleu
-        borderRadius: BorderRadius.circular(16),
+        color: Couleur.backgroundColor,
+        border: Border(bottom: BorderSide(width: 2, color: Couleur.textColor)),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(0),
+            decoration: BoxDecoration(
+              color: Couleur.backgroundColor, // Bleu
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Titre avec icône
+                Row(
+                  children: [
+                    Text(
+                      nom,
+                      style: const TextStyle(
+                        color: Couleur.textColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SvgPicture.asset(
+                      'assets/icon/medicament_icon.svg',
+                      width: 16,
+                      height: 16,
+                      colorFilter: const ColorFilter.mode(
+                        Couleur.textColor,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+
+                // Heure
+                Text(
+                  heure,
+                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                ),
+                const SizedBox(height: 4),
+
+                // Dosage
+                Text(
+                  dosage,
+                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          iconWidget,
+        ],
+      ),
+    );
+  }
+
+  Widget buildProgressing({
+    required double valueActuelle,
+    required double valueObjectif,
+    required Color indicatorColor,
+    required String interpretation,
+  }) {
+    double value = valueActuelle / valueObjectif;
+    double valuePourCent = value * 100;
+    return Container(
+      color: Couleur.backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          // Titre avec icône
           Row(
             children: [
-              Text(
-                nom,
-                style: const TextStyle(
-                  color: Couleur.textSecondaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Container(
+                color: Couleur.backgroundColor,
+                width: 150,
+                child: LinearProgressIndicator(
+                  semanticsValue: "50M",
+                  value: value,
+                  minHeight: 16,
+                  backgroundColor: Couleur.inputColor,
+                  color: indicatorColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              const SizedBox(width: 8),
-              SvgPicture.asset(
-                'assets/icon/medicament_icon.svg',
-                width: 16,
-                height: 16,
-                colorFilter: const ColorFilter.mode(
-                  Couleur.textSecondaryColor,
-                  BlendMode.srcIn,
-                ),
+              Text(
+                " : ${valuePourCent.toInt()}%",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: indicatorColor),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-
-          // Heure
+          SizedBox(height: 8),
           Text(
-            heure,
-            style: TextStyle(color: Couleur.textSecondaryColor, fontSize: 12),
+            interpretation,
+            style: TextStyle(
+              color: indicatorColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const SizedBox(height: 4),
+        ],
+      ),
+    );
+  }
 
-          // Dosage
+  Widget buildImcCard({
+    required Color containerColor,
+    required interpretation,
+  }) {
+    return Container(
+      color: Couleur.backgroundColor,
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: containerColor,
+              borderRadius: BorderRadius.circular(34),
+            ),
+          ),
+
+          SizedBox(width: 16),
+
           Text(
-            dosage,
-            style: TextStyle(color: Couleur.textSecondaryColor, fontSize: 12),
+            interpretation,
+            style: TextStyle(fontSize: 16, color: Couleur.textColor),
           ),
         ],
       ),
@@ -95,17 +208,15 @@ class ContainerResult {
   Widget buildHabitudeCard({
     required String label,
     required String value,
-    required String heure,
-    required IconData icon,
-    required Color backColor,
-    required String interpertation,
+    required String iconHabitude,
+    required Widget widgetColor,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: backColor,
-        borderRadius: BorderRadius.circular(12),
+        color: Couleur.backgroundColor,
+        border: Border(bottom: BorderSide(color: Couleur.textColor, width: 2)),
       ),
       child: Row(
         children: [
@@ -116,39 +227,30 @@ class ContainerResult {
                 Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Couleur.textColor,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Couleur.backgroundColor,
+                    fontSize: 32,
+                    color: Couleur.textColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                Text(
-                  heure,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Couleur.backgroundColor,
-                  ),
-                ),
-
-                Text(
-                  interpertation,
-                  style: TextStyle(
-                    color: Couleur.backgroundColor,
-                    fontSize: 16,
-                  ),
-                ),
+                widgetColor,
               ],
             ),
           ),
-          Icon(icon, size: 30, color: Couleur.backgroundColor),
+          SvgPicture.asset(
+            iconHabitude,
+            height: 40,
+            width: 32,
+            color: Couleur.textColor,
+          ),
         ],
       ),
     );
@@ -157,10 +259,10 @@ class ContainerResult {
   Widget buildInfoCard(String label, String value) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Couleur.cardBackgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        color: Couleur.backgroundColor,
+        border: Border(bottom: BorderSide(color: Couleur.textColor, width: 1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,15 +270,127 @@ class ContainerResult {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Couleur.textColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontSize: 14, color: Colors.white70),
+            style: const TextStyle(fontSize: 16, color: Couleur.textColor),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildIconHomeCard(String iconCard, String value) {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          iconCard,
+          height: 24,
+          width: 24,
+          color: Couleur.textColor,
+        ),
+        SizedBox(width: 10),
+        Text(value, style: TextStyle(color: Couleur.textColor, fontSize: 16)),
+      ],
+    );
+  }
+
+  Widget buildHomeCard({
+    required String titre,
+    required int nbrMedicament,
+    required double nbrPas,
+    required double hydratation,
+    required double hydratationObjetctif,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Couleur.homeCard,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2), // Couleur de l'ombre
+            spreadRadius: 2, // Étendue de l'ombre
+            blurRadius: 10, // Flou de l'ombre
+            offset: Offset(0, 5), // Position (x, y) - ici 5 pixels vers le bas
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titre,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Couleur.textColor,
+            ),
+          ),
+          SizedBox(height: 16),
+          buildIconHomeCard(
+            "assets/icon/medicament_icon.svg",
+            "Medicament : $nbrMedicament en atente",
+          ),
+
+          SizedBox(height: 16),
+
+          buildIconHomeCard(
+            "assets/icon/hydratation.svg",
+            "Hydratation : $hydratation/$hydratationObjetctif",
+          ),
+          SizedBox(height: 16),
+
+          buildIconHomeCard("assets/icon/pas.svg", "Pas : $nbrPas/5000"),
+        ],
+      ),
+    );
+  }
+
+  Widget buildHomeHabitude({
+    required String titre,
+    required String value,
+    required Color cardColor,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      width: 150,
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2), // Couleur de l'ombre
+            spreadRadius: 2, // Étendue de l'ombre
+            blurRadius: 10, // Flou de l'ombre
+            offset: Offset(0, 5), // Position (x, y) - ici 5 pixels vers le bas
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titre,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 2),
+          Container(
+            height: 1,
+            width: double.infinity,
+            color: Couleur.textColor,
+          ),
+
+          SizedBox(height: 8),
+
+          Text(
+            value,
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
         ],
       ),

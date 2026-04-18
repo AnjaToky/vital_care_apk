@@ -54,60 +54,65 @@ class ProfilView extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 2,
-                            width: double.infinity,
-                            color: Couleur.butttonPrimaryColor,
-                          ),
-                          const SizedBox(height: 24),
-
                           // Photo et info utilisateur
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundColor: Couleur.backgroundColor,
-                                backgroundImage: profil.image != null
-                                    ? FileImage(File(profil.image!))
-                                    : null,
-                                child: profil.image == null
-                                    ? const Icon(
-                                        Icons.person,
-                                        size: 40,
-                                        color: Colors.white,
-                                      )
-                                    : null,
-                              ),
-                              const SizedBox(width: 16),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    profil.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${profil.name.toLowerCase()}@email.com',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
                           Container(
-                            height: 2,
-                            width: double.infinity,
-                            color: Couleur.butttonPrimaryColor,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Couleur.backgroundColor,
+                              border: Border(bottom: BorderSide(width: 1, color: Couleur.textColor))
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Couleur.backgroundColor,
+                                    borderRadius: BorderRadius.circular(8),
+                                    image:
+                                        profil.image != null &&
+                                            profil.image!.isNotEmpty
+                                        ? DecorationImage(
+                                            image: FileImage(File(profil.image!)),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
+                                  ),
+                                  child:
+                                      (profil.image == null ||
+                                          profil.image!.isEmpty)
+                                      ? const Icon(
+                                          Icons.person,
+                                          size: 40,
+                                          color: Colors.white,
+                                        )
+                                      : null,
+                                ),
+                                const SizedBox(width: 16),
+                            
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      profil.name,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Couleur.textColor,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Profil santer',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 24),
 
@@ -118,16 +123,28 @@ class ProfilView extends ConsumerWidget {
                           containerResult.buildInfoCard('Âge', '${profil.age}'),
                           const SizedBox(height: 12),
 
-                          containerResult.buildInfoCard('Poid (kg)', '${profil.poids}'),
+                          containerResult.buildInfoCard(
+                            'Poid (kg)',
+                            '${profil.poids}',
+                          ),
                           const SizedBox(height: 12),
 
-                          containerResult.buildInfoCard('Taille (cm)', '${profil.taille}'),
+                          containerResult.buildInfoCard(
+                            'Taille (cm)',
+                            '${profil.taille}',
+                          ),
                           const SizedBox(height: 12),
 
-                          containerResult.buildInfoCard('Allergie', profil.allergies),
+                          containerResult.buildInfoCard(
+                            'Allergie',
+                            profil.allergies,
+                          ),
                           const SizedBox(height: 12),
 
-                          containerResult.buildInfoCard('Traitement', profil.traitements),
+                          containerResult.buildInfoCard(
+                            'Traitement',
+                            profil.traitements,
+                          ),
                         ],
                       ),
                     ),

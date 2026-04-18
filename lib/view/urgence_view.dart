@@ -41,14 +41,6 @@ class UrgenceView extends ConsumerWidget {
                       SizedBox(height: 16),
                       containerResult.buildInfoCard("Age", "${nomProfil.age}"),
                       SizedBox(height: 16),
-
-                      containerResult.cardMedicament(
-                        lastMedicament.nom,
-                        "${lastMedicament.dosage}",
-                        "${lastMedicament.frequence}",
-                        "${lastMedicament.heure.hour} heur : ${lastMedicament.heure.minute}",
-                        Couleur.cardBackgroundColor,
-                      ),
                     ],
                   );
                 },

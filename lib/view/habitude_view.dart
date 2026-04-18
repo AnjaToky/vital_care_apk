@@ -4,9 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
+import 'package:vital_care/view/widget/bottom_sheet_habitude.dart';
+import 'package:vital_care/view/widget/container_result.dart';
 import 'package:vital_care/view_model/habitude_view_model.dart';
 import 'package:vital_care/view_model/imc_view_model.dart';
 import 'package:vital_care/view_model/profil_view_model.dart';
+import 'package:vital_care/view_model/tension_view_model.dart';
 
 class HabitudeView extends ConsumerWidget {
   const HabitudeView({super.key});
@@ -17,6 +20,7 @@ class HabitudeView extends ConsumerWidget {
     final profilAsync = ref.watch(profilViewModelProvider);
     final imcAsync = ref.watch(icmViewModelProvide);
     BottomNavBar bottomNavBar = BottomNavBar();
+    ContainerResult containerResult = ContainerResult();
     AppBarView appBarView = AppBarView();
     return Scaffold(
       appBar: appBarView.appBarPage("Prise quotidienne"),
@@ -39,6 +43,11 @@ class HabitudeView extends ConsumerWidget {
                           .read(icmViewModelProvide.notifier)
                           .getDernierImc(imc);
 
+                      final poidHabitude = habitude.poidHabitude;
+                      final hydratationObjetctif = ref
+                          .read(habitudeViewModelProvider.notifier)
+                          .calculeHydratation(poidHabitude);
+
                       return profilAsync.when(
                         data: (profil) {
                           return SingleChildScrollView(
@@ -50,51 +59,107 @@ class HabitudeView extends ConsumerWidget {
 
                                 // Date
                                 Text(
-                                  'Dernière mise à jour: ${DateFormat('dd MMMM yyyy, HH:mm').format(habitude.createdAt)}',
+                                  '|${DateFormat('dd MMMM yyyy, HH:mm').format(habitude.createdAt)}',
                                   style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xFF1976D2),
+                                    fontSize: 32,
+                                    color: Couleur.textColor,
                                   ),
                                 ),
+                                SizedBox(height: 16),
+                                Container(
+                                  height: 1,
+                                  width: double.infinity,
+                                  color: Couleur.textColor,
+                                ),
+
+                                SizedBox(height: 16),
+                                containerResult.buildHabitudeCard(
+                                  label: "Poid",
+                                  value: habitude.poidHabitude.toString(),
+                                  iconHabitude: "assets/icon/poid.svg",
+                                  widgetColor: SizedBox(height: 0),
+                                ),
+
                                 const SizedBox(height: 16),
 
-                                // Cards
-                                _buildHabitudeCard(
-                                  label: 'Poids',
-                                  value: '${habitude.poidHabitude.toInt()} kg',
-                                  icon: Icons.monitor_weight_outlined,
+                                containerResult.buildHabitudeCard(
+                                  label: "Hydratation (ml)",
+                                  value: habitude.hydratation.toString(),
+                                  iconHabitude: "assets/icon/hydratation.svg",
+                                  widgetColor: containerResult.buildProgressing(
+                                    valueActuelle: habitude.hydratation,
+                                    valueObjectif: hydratationObjetctif,
+                                    indicatorColor: ref
+                                        .read(
+                                          habitudeViewModelProvider.notifier,
+                                        )
+                                        .hydratationColor(
+                                          habitude.hydratation,
+                                          hydratationObjetctif,
+                                        ),
+                                    interpretation: ref
+                                        .read(
+                                          habitudeViewModelProvider.notifier,
+                                        )
+                                        .hydratationInterpretation(
+                                          habitude.hydratation,
+                                          hydratationObjetctif,
+                                        ),
+                                  ),
                                 ),
-                                const SizedBox(height: 12),
 
-                                _buildHabitudeCard(
-                                  label: 'Hydratation',
-                                  value: '${habitude.hydratation} Litre',
-                                  icon: Icons.water_drop_outlined,
+                                const SizedBox(height: 12),
+                                containerResult.buildHabitudeCard(
+                                  label: "Pas",
+                                  value: habitude.nbrPas.toString(),
+                                  iconHabitude: "assets/icon/pas.svg",
+                                  widgetColor: containerResult.buildProgressing(
+                                    valueActuelle: habitude.nbrPas.toDouble(),
+                                    valueObjectif: 5000,
+                                    indicatorColor:
+                                        Couleur.buttonSecondaryColor,
+                                    interpretation: "Milay",
+                                  ),
                                 ),
-                                const SizedBox(height: 12),
 
-                                _buildHabitudeCard(
-                                  label: 'Pas',
-                                  value:
-                                      '${habitude.nbrPas.toInt()}', // Tu peux ajouter ce champ à ton modèle
-                                  icon: Icons.directions_walk_outlined,
-                                ),
                                 const SizedBox(height: 12),
-
-                                _buildHabitudeCard(
-                                  label: 'IMC',
+                                containerResult.buildHabitudeCard(
+                                  label: "IMC",
                                   value: lastImc != null
-                                      ? '${lastImc.valuerImc.toInt()}'
-                                      : '--',
-                                  icon: Icons.person_outlined,
+                                      ? "${lastImc.valuerImc.toInt()}"
+                                      : "0 0",
+                                  iconHabitude: "assets/icon/imc.svg",
+                                  widgetColor: containerResult.buildImcCard(
+                                    containerColor: ref
+                                        .read(icmViewModelProvide.notifier)
+                                        .couleurIMC(lastImc?.valuerImc ?? 0),
+                                    interpretation: ref
+                                        .read(icmViewModelProvide.notifier)
+                                        .interpreterIMC(
+                                          lastImc?.valuerImc ?? 0,
+                                        ),
+                                  ),
                                 ),
                                 const SizedBox(height: 12),
-
-                                _buildHabitudeCard(
-                                  label: 'Tension',
+                                containerResult.buildHabitudeCard(
+                                  label: "Tension",
                                   value:
                                       '${habitude.tensionSystolique.toInt()}/${habitude.tenstionDiastolique.toInt()}',
-                                  icon: Icons.monitor_heart_outlined,
+                                  iconHabitude: "assets/icon/tension.svg",
+                                  widgetColor: containerResult.buildImcCard(
+                                    containerColor: ref
+                                        .read(tensionViewModelProvider.notifier)
+                                        .couleurTension(
+                                          habitude.tensionSystolique,
+                                          habitude.tenstionDiastolique,
+                                        ),
+                                    interpretation: ref
+                                        .read(tensionViewModelProvider.notifier)
+                                        .interpreterTension(
+                                          habitude.tensionSystolique,
+                                          habitude.tenstionDiastolique,
+                                        ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -123,52 +188,11 @@ class HabitudeView extends ConsumerWidget {
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Couleur.backgroundColor,
-        onPressed: () => Navigator.pushNamed(context, '/ajout_habitude'),
+        onPressed: () {
+          BottomSheetHabitude bottomSheetHabitude = BottomSheetHabitude();
+          bottomSheetHabitude.showBottomSheetDialog(context, ref);
+        },
         child: Icon(Icons.add, color: Couleur.butttonPrimaryColor),
-      ),
-    );
-  }
-
-  Widget _buildHabitudeCard({
-    required String label,
-    required String value,
-    required IconData icon,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Couleur.cardBackgroundColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Couleur.backgroundColor,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Couleur.backgroundColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(icon, size: 30, color: Couleur.backgroundColor),
-        ],
       ),
     );
   }

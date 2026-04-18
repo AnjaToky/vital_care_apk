@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vital_care/view/ajout_habitude.dart';
 import 'package:vital_care/view/ajout_profil_view.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+      ),
       title: 'Vital Care',
       home: BiometricAuthView(),
       //initialRoute: '/profil',

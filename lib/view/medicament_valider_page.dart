@@ -42,7 +42,8 @@ class MedicamentValiderPage extends ConsumerWidget {
                         "${m.dosage} gramme",
                         "${m.frequence} fois par jour ",
                         "${m.heure.hour} h : ${m.heure.minute} ",
-                        Couleur.secondaryColor,
+                        
+                        containerResult.buildIconStatus(icon: "assets/icon/check.svg", iconColor: Couleur.secondaryColor)
                       ),
                     );
                   },

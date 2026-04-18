@@ -42,7 +42,7 @@ class MedicamentManquerPage extends ConsumerWidget {
                         "${m.dosage} gramme",
                         "${m.frequence} fois par jour ",
                         "${m.heure.hour} h : ${m.heure.minute} ",
-                        Couleur.accentColor
+                        containerResult.buildIconStatus(icon: "assets/icon/close.svg", iconColor: Couleur.buttonAccentColor)
                       ),
                     );
                   },

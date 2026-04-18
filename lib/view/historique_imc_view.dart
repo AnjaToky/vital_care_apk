@@ -4,10 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vital_care/model/imc_model.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
+import 'package:vital_care/view/pdf/fonction_pdf.dart';
 import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
 import 'package:vital_care/view/widget/container_result.dart';
 import 'package:vital_care/view_model/imc_view_model.dart';
+import 'package:vital_care/view_model/medicament_view_model.dart';
+import 'package:vital_care/view_model/profil_view_model.dart';
+import 'package:vital_care/view_model/tension_view_model.dart';
 
 class HistoriqueImcView extends ConsumerWidget {
   const HistoriqueImcView({super.key});
@@ -82,11 +86,10 @@ class HistoriqueImcView extends ConsumerWidget {
                           containerResult.buildHabitudeCard(
                             label: "Moyenn IMC",
                             value: "${imcMoyenne.toInt()}",
-                            heure:
-                                "${DateTime.now().day}/${imcDate.toString()}/${DateTime.now().year}",
-                            icon: Icons.heart_broken_rounded,
-                            backColor: imcColor,
-                            interpertation: imcInterpretation,
+                            //heure:
+                                //"${DateTime.now().day}/${imcDate.toString()}/${DateTime.now().year}",
+                            iconHabitude: "assets/icon/imc.svg",
+                            widgetColor: containerResult.buildImcCard(containerColor: imcColor, interpretation: imcInterpretation)
                           ),
                         ],
                       );
@@ -105,6 +108,84 @@ class HistoriqueImcView extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Couleur.backgroundColor,
+
+        onPressed: () async {
+          try {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(child: CircularProgressIndicator()),
+            );
+
+            final profilAsync = ref.watch(profilViewModelProvider);
+            final imcAsync = ref.watch(icmViewModelProvide);
+            final medicamentAsync = ref.watch(medicamentViewModelProvider);
+            final tensionasync = ref.watch(tensionViewModelProvider);
+            FonctionPdf pdf = FonctionPdf();
+
+            profilAsync.when(
+              data: (profil) {
+                return imcAsync.when(
+                  data: (imcList) {
+                    return medicamentAsync.when(
+                      data: (medicamentEnAtente) {
+                        return tensionasync.when(
+                          data: (tensionList) {
+                            pdf.generateHealthPdf(
+                              profil: profil,
+                              imcList: imcList,
+                              medicaments: medicamentEnAtente,
+                              tension: tensionList,
+                            );
+                          },
+                          error: (e, s) => "",
+                          loading: () => "",
+                        );
+                      },
+                      error: (e, s) => "",
+                      loading: () => "",
+                    );
+                  },
+                  error: (e, s) => "",
+                  loading: () => "",
+                );
+              },
+              error: (e, s) => "",
+              loading: () => "",
+            );
+
+            Navigator.pop(context); // fermer loader
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                elevation:1,
+                backgroundColor: Couleur.buttonSecondaryColor,
+                content: Text(
+                  "PDF généré avec succès ",
+                  style: TextStyle(color: Couleur.backgroundColor),
+                ),
+              ),
+            );
+          } catch (e) {
+            Navigator.pop(context);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Couleur.accentColor,
+                content: Text(
+                  "Erreur lors de l'export",
+                  style: TextStyle(color: Couleur.backgroundColor),
+                ),
+              ),
+            );
+          }
+        },
+        icon: Icon(Icons.download),
+        label: Text("Exporter PDF", style: TextStyle(color: Couleur.textColor)),
       ),
 
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),

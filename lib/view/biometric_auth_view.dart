@@ -82,12 +82,11 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    authState.isBlocked ? Icons.lock : Icons.fingerprint,
-                    size: 80,
-                    color: authState.isBlocked
-                        ? Colors.red  
-                        : const Color(0xFF1976D2),
+                  child: Image.asset(
+                    authState.isBlocked
+                        ? "assets/logo/kade.png"
+                        : "assets/logo/container_logo.png",
+                    fit: BoxFit.cover,
                   ),
                 ),
                 const SizedBox(height: 32),

@@ -33,7 +33,7 @@ class MedicamentView extends ConsumerWidget {
 
       body: Column(
         children: [
-          SizedBox(height: 16,),
+          SizedBox(height: 16),
           appBarView.appBarMadicament(context, 0, Couleur.cardBackgroundColor),
           medicamentAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
@@ -71,28 +71,18 @@ class MedicamentView extends ConsumerWidget {
                           color: cardColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Column(
-                          children: [
-                            containerResult.cardMedicament(
-                              m.nom,
-                              "${m.dosage} gramme",
-                              "${m.frequence} fois par jour ",
-                              "${m.heure.hour} h : ${m.heure.minute} ",
-                              Couleur.cardBackgroundColor,
-                            ),
-
-                            containerResult.bouttonValider(
-                              () {
-                                ref
-                                    .read(medicamentViewModelProvider.notifier)
-                                    .validerMedicament(m);
-                              },
-                              Couleur.buttonSecondaryColor,
-                              300,
-                              "Valider",
-                            ),
-                            SizedBox(height: 16),
-                          ],
+                        child: containerResult.cardMedicament(
+                          m.nom,
+                          "${m.dosage} gramme",
+                          "${m.frequence} fois par jour ",
+                          "${m.heure.hour} h : ${m.heure.minute} ",
+                          containerResult.buildIconButton(
+                            onTap: () {
+                              ref
+                                  .read(medicamentViewModelProvider.notifier)
+                                  .validerMedicament(m);
+                            },
+                          ),
                         ),
                       ),
                     );

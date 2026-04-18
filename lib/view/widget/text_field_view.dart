@@ -11,44 +11,31 @@ class TextFieldView {
     );
   }
 
-  Widget buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Couleur.butttonPrimaryColor,
-        ),
-      ),
-    );
-  }
-
   Widget buildTextField(
     TextEditingController controller,
-    String hint, [
+    String label, [
     TextInputType keyboardType = TextInputType.text,
   ]) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey[400]),
+        labelText: label,
+        labelStyle: TextStyle(color: Couleur.textColor,fontSize: 16),
+        hintStyle: TextStyle(color: Couleur.textColor),
         filled: true,
-        fillColor: Couleur.backgroundColor,
+        fillColor: Couleur.inputColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 12,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Couleur.primaryColor, width: 1.5),
+          borderSide: const BorderSide(color: Couleur.textColor, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Couleur.primaryColor, width: 1.5),
+          borderSide: const BorderSide(color: Couleur.backgroundColor, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

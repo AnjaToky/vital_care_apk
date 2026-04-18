@@ -115,11 +115,11 @@ class TensionViewModel extends AsyncNotifier<List<Tension>> {
   }
 
   Color couleurTension(double systolique, double diastolique) {
-    if (systolique < 90 || diastolique < 60) return Couleur.butttonPrimaryColor;
+    if (systolique < 90 || diastolique < 60) return Couleur.alertColor;
     if (systolique < 120 && diastolique < 80) return Couleur.secondaryColor;
-    if (systolique < 140 || diastolique < 90) return Colors.orange;
+    if (systolique < 140 || diastolique < 90) return Couleur.alertColor;
     if (systolique >= 180 || diastolique >= 120) return Couleur.accentColor;
-    return Colors.deepOrange;
+    return Couleur.accentColor;
   }
 
   Future<void> ajouterTension(Tension tension) async {

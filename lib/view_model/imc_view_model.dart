@@ -14,7 +14,7 @@ class ImcViewModel extends AsyncNotifier<List<Imc>> {
   }
 
   Imc? getDernierImc(List<Imc> list) {
-    if (list.isEmpty) {
+    if (list.isEmpty  ) {
       return Imc(valuerImc: 0, createdAt: DateTime.now());
     }
 
@@ -42,16 +42,16 @@ class ImcViewModel extends AsyncNotifier<List<Imc>> {
   String interpreterIMC(double imc) {
     if (imc < 18.5) return 'Insuffisance pondérale';
     if (imc < 25) return 'Poids normal';
-    if (imc < 30) return 'Surpoids';
+    if (imc < 30) return 'Surpoids';  
     if (imc < 35) return 'Obésité modérée';
     if (imc < 40) return 'Obésité sévère';
     return 'Obésité morbide';
   }
 
   Color couleurIMC(double imc) {
-    if (imc < 18.5) return Colors.orange;
+    if (imc < 18.5) return Couleur.alertColor;
     if (imc < 25) return Couleur.secondaryColor;
-    if (imc < 30) return Colors.orange;
+    if (imc < 30) return Couleur.alertColor;
     return Couleur.accentColor;
   }
 

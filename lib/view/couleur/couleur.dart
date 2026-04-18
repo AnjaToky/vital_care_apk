@@ -8,6 +8,9 @@ class Couleur {
   static const Color accentColor = Color(0xFFFF7077);
   static const Color backgroundColor = Color(0xFFF8FAFC);
   static const Color textColor = Color(0xFF1E293B);
+  static const Color alertColor = Color(0xFFDBA82E);
+  static const Color inputColor = Color(0xFFD9DCDE);
+  static const Color homeCard = Color(0xFFFFFFFF);
 
   static const Color butttonPrimaryColor = primaryColor;
   static const Color buttonSecondaryColor = secondaryColor;
