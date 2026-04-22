@@ -28,6 +28,9 @@ class MedicamentDao {
         medicament.frequence.toString(),
       );
       map['heure'] = _encryptService!.encrypt(medicament.heure.toString());
+      map['create_at'] = _encryptService!.encrypt(
+        medicament.createAt.toIso8601String(),
+      );
 
       return await db.insert(
         'medicament',

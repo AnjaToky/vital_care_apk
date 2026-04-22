@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vital_care/services/notification_service.dart';
 import 'package:vital_care/view/ajout_profil_view.dart';
 import 'package:vital_care/view/auth_guard_view.dart';
 import 'package:vital_care/view/biometric_auth_view.dart';
@@ -15,17 +14,11 @@ import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
 import 'package:vital_care/view/urgence_view.dart';
 
-void main() async {
+void main()  {
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialise les notifications
-  await NotificationService().initialiser();
-
   runApp(ProviderScope(child: MyApp()));
 }
 

@@ -51,6 +51,7 @@ class MedicamentManquerPage extends ConsumerWidget {
                           icon: "assets/icon/close.svg",
                           iconColor: Couleur.buttonAccentColor,
                         ),
+                        SizedBox()
                       ),
                     );
                   },

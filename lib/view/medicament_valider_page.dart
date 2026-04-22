@@ -49,6 +49,7 @@ class MedicamentValiderPage extends ConsumerWidget {
                           icon: "assets/icon/check.svg",
                           iconColor: Couleur.secondaryColor,
                         ),
+                        SizedBox(),
                       ),
                     );
                   },

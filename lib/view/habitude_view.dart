@@ -63,7 +63,7 @@ class HabitudeView extends ConsumerWidget {
                                   style: const TextStyle(
                                     fontSize: 32,
                                     color: Couleur.textColor,
-                                    fontWeight: FontWeight.bold
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 SizedBox(height: 16),
@@ -119,7 +119,7 @@ class HabitudeView extends ConsumerWidget {
                                     valueObjectif: 5000,
                                     indicatorColor:
                                         Couleur.buttonSecondaryColor,
-                                    interpretation: "Milay",
+                                    interpretation: "Continuer c'est très bien",
                                   ),
                                 ),
 

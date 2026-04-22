@@ -6,6 +6,7 @@ import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/bottom_nav_bar.dart';
 import 'package:vital_care/view/widget/container_result.dart';
 import 'package:vital_care/view/widget/dialog_view.dart';
+import 'package:vital_care/view/widget/medicament_progress_widget.dart';
 import 'package:vital_care/view_model/medicament_view_model.dart';
 
 class MedicamentView extends ConsumerWidget {
@@ -77,8 +78,8 @@ class MedicamentView extends ConsumerWidget {
                         child: containerResult.cardMedicament(
                           m.nom,
                           "${m.dosage} gramme",
-                          "${m.frequence} fois par jour ",
-                          "${m.heure.hour} h : ${m.heure.minute} ",
+                          "Prise de medicament ${m.heure.difference(m.createAt).inHours} h",
+                          "${m.heure.hour} h : ${m.heure.minute} min",
                           containerResult.buildIconButton(
                             onTap: () {
                               ref
@@ -99,6 +100,10 @@ class MedicamentView extends ConsumerWidget {
                             },
                             couleurIcon: Couleur.butttonPrimaryColor,
                             icon: "assets/icon/check.svg",
+                          ),
+                          MedicamentProgressWidget(
+                            dateActuelle: m.createAt,
+                            dateObjectif: m.heure,
                           ),
                         ),
                       ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
@@ -131,12 +133,14 @@ class ContainerResult {
     );
   }
 
+
   Widget cardMedicament(
     String nom,
     String dosage,
-    String frequence,
+    String dateFin,
     String heure,
     Widget iconWidget,
+    Widget progressWidget,
   ) {
     return Container(
       padding: EdgeInsets.all(8),
@@ -219,6 +223,8 @@ class ContainerResult {
                     ),
                   ],
                 ),
+                SizedBox(height: 16,),
+                progressWidget,
               ],
             ),
           ),
