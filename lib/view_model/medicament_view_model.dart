@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vital_care/model/medicament_model.dart';
+import 'package:vital_care/services/notification_service.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
 
 final medicamentViewModel = Provider<MedicamentModel>(
   (ref) => MedicamentModel(),
@@ -49,6 +52,7 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
         dosage: 0,
         frequence: 0,
         heure: DateTime.now(),
+        createAt: DateTime.now(),
       );
     }
 
@@ -59,11 +63,33 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
     return enAttente.first;
   }
 
+  Color progressingColor(double value) {
+    switch (value) {
+      case > 20:
+        return Couleur.butttonPrimaryColor;
+      case > 40:
+        return Couleur.buttonSecondaryColor;
+      case > 60:
+        return Couleur.alertColor;
+      case > 80:
+        return Couleur.accentColor;
+      default:
+        Couleur.cardBackgroundColor;
+    }
+    return Couleur.butttonPrimaryColor;
+  }
+
   Future<void> ajouterMedicament(Medicament medicament) async {
     final medicamentModel = ref.read(medicamentViewModel);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await medicamentModel.ajouterMedicament(medicament);
+
+      final id = await medicamentModel.ajouterMedicament(medicament);
+
+      //  Planifie la notification avec l'ID retourné
+      final medicamentAvecId = medicament..id = id;
+      await NotificationService().planifierNotification(medicamentAvecId);
       return medicamentModel.afficherMedicaments();
     });
   }
@@ -73,6 +99,9 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await medicamentModel.supprimerMedicament(id);
+
+      await NotificationService().annulerNotification(id);
+
       return medicamentModel.afficherMedicaments();
     });
   }

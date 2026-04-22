@@ -29,7 +29,9 @@ class MedicamentValiderPage extends ConsumerWidget {
               final valides = list
                   .where((m) => m.status == MedicamentStatus.valider)
                   .toList();
-
+              if (valides.isEmpty) {
+                return Center(child: Text("Pas de medicament en valider"));
+              }
               return Expanded(
                 child: ListView.builder(
                   itemCount: valides.length,
@@ -42,8 +44,11 @@ class MedicamentValiderPage extends ConsumerWidget {
                         "${m.dosage} gramme",
                         "${m.frequence} fois par jour ",
                         "${m.heure.hour} h : ${m.heure.minute} ",
-                        
-                        containerResult.buildIconStatus(icon: "assets/icon/check.svg", iconColor: Couleur.secondaryColor)
+
+                        containerResult.buildIconStatus(
+                          icon: "assets/icon/check.svg",
+                          iconColor: Couleur.secondaryColor,
+                        ),
                       ),
                     );
                   },

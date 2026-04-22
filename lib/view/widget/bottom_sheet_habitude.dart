@@ -29,21 +29,33 @@ class BottomSheetHabitude {
           ),
           child: Container(
             padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(color: Couleur.backgroundColor, borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(
+              color: Couleur.backgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment : CrossAxisAlignment.center,
                   spacing: 16,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      "Prise Quotidienne",
+                      style: TextStyle(
+                        color: Couleur.textColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
                     textFieldView.buildTextField(
                       poidController,
                       "Poids en kg",
                       TextInputType.number,
                     ),
-                          
+
                     textFieldView.buildTextField(
                       pasController,
                       "Nombre de pas",
@@ -51,7 +63,7 @@ class BottomSheetHabitude {
                     ),
                     textFieldView.buildTextField(
                       hydratationController,
-                      "10000 ml",
+                      "Hydratation (ml)",
                       TextInputType.number,
                     ),
                     textFieldView.buildTextField(
@@ -59,7 +71,7 @@ class BottomSheetHabitude {
                       "Tension systolique",
                       TextInputType.number,
                     ),
-                          
+
                     textFieldView.buildTextField(
                       diastoliqueController,
                       "Tension diastolique",
@@ -70,9 +82,9 @@ class BottomSheetHabitude {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            //minimumSize: const Size(50),
-                            backgroundColor: Couleur.accentColor,
-                            foregroundColor: Colors.white,
+                            fixedSize: Size(150, 50),
+                            backgroundColor: Couleur.inputColor,
+                            foregroundColor: Couleur.textColor,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,
                               vertical: 12,
@@ -84,11 +96,17 @@ class BottomSheetHabitude {
                           onPressed: () {
                             Navigator.pushNamed(context, '/habitude_view');
                           },
-                          child: Text("Annuler"),
+                          child: Text(
+                            "Annuler",
+                            style: TextStyle(
+                              color: Couleur.textColor,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            //minimumSize: const Size(double.infinity, 50),
+                            fixedSize: Size(150, 50),
                             backgroundColor: Couleur.primaryColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
@@ -103,40 +121,45 @@ class BottomSheetHabitude {
                             final habitudeAsync = ref.read(
                               habitudeViewModelProvider,
                             );
-                            final habitude = habitudeAsync.value;
-                            if (habitude != null) {
-                              habitudeNotifier.supprimerHabitude(habitude.id!);
-                            }
-                          
+
                             if (formKey.currentState!.validate()) {
+                              final habitudeValue = habitudeAsync.value;
+                              if (habitudeValue != null) {
+                                habitudeNotifier.supprimerHabitude(
+                                  habitudeValue.id ?? 0,
+                                );
+                              }
                               final poisStr = poidController.text;
                               final pasStr = pasController.text;
                               final hydratationStr = hydratationController.text;
                               final systoliqueStr = systoliqueController.text;
                               final diastoliqueStr = diastoliqueController.text;
-                          
+
                               final poids = double.tryParse(poisStr);
                               final pas = int.tryParse(pasStr);
-                              final hydratation = double.tryParse(hydratationStr);
+                              final hydratation = double.tryParse(
+                                hydratationStr,
+                              );
                               final systolique = int.tryParse(systoliqueStr);
                               final diastolique = int.tryParse(diastoliqueStr);
-                          
+
                               final habitude = Habitude(
                                 poidHabitude: poids ?? 0.0,
                                 nbrPas: pas ?? 0,
                                 hydratation: hydratation ?? 0.0,
-                                tensionSystolique: systolique?.toDouble() ?? 0.0,
+                                tensionSystolique:
+                                    systolique?.toDouble() ?? 0.0,
                                 tenstionDiastolique:
                                     diastolique?.toDouble() ?? 0.0,
                                 createdAt: DateTime.now(),
                               );
-                          
+
                               habitudeNotifier.ajouterHabitude(habitude);
                               habitudeNotifier.actualiserHabitude();
                               imcNotifire.calculerEtAjouterImc(
                                 habitude.poidHabitude,
                               );
-                          
+
                               tensioNotifier.ajouterTensionList(
                                 habitude.tensionSystolique,
                                 habitude.tenstionDiastolique,
@@ -144,7 +167,8 @@ class BottomSheetHabitude {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    backgroundColor: Couleur.buttonSecondaryColor,
+                                    backgroundColor:
+                                        Couleur.buttonSecondaryColor,
                                     content: Text(
                                       "Habitude ajoutée avec succès",
                                       style: TextStyle(
@@ -157,7 +181,14 @@ class BottomSheetHabitude {
                               Navigator.pop(context);
                             }
                           },
-                          child: Text("Valider"),
+                          child: Text(
+                            "Valider",
+                            style: TextStyle(
+                              color: Couleur.backgroundColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vital_care/model/profil_model.dart';
+import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view_model/profil_view_model.dart';
 
 class ImagePickerValidate {
@@ -18,7 +19,10 @@ class ImagePickerValidate {
         child: Wrap(
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
+              leading: const Icon(
+                Icons.camera_alt,
+                color: Couleur.butttonPrimaryColor,
+              ),
               title: const Text('Prendre une photo'),
               onTap: () {
                 Navigator.pop(context);
@@ -26,7 +30,10 @@ class ImagePickerValidate {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library),
+              leading: const Icon(
+                Icons.photo_library,
+                color: Couleur.butttonPrimaryColor,
+              ),
               title: const Text('Choisir de la galerie'),
               onTap: () {
                 Navigator.pop(context);
@@ -40,16 +47,16 @@ class ImagePickerValidate {
   }
 
   Future<void> _getImage(ImageSource source, WidgetRef ref) async {
-    // ✅ Appelle le ViewModel
+    //Appelle le ViewModel
     final viewModel = ref.read(profilViewModelProvider.notifier);
     final image = await viewModel.prendreImage(source);
 
     if (image != null) {
       _selectedImage = image;
       //Affiche un aperçu ou une confirmation
-      print('Image sélectionnée : ${image.path}');
+      //print('Image sélectionnée : ${image.path}');
     } else {
-      print('Aucune image sélectionnée');
+      //print('Aucune image sélectionnée');
     }
   }
 
@@ -83,7 +90,7 @@ class ImagePickerValidate {
         poids: poids!,
         allergies: allergie,
         traitements: traitement,
-        image: _selectedImage!.path, // Chemin de l'image
+        image: _selectedImage?.path, // Chemin de l'image
       );
 
       //Sauvegarde via le ViewModel
@@ -92,7 +99,7 @@ class ImagePickerValidate {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Profil enregistré ✅')));
+        ).showSnackBar(SnackBar(content: Text('Profil enregistré')));
         Navigator.pop(context);
       }
     }

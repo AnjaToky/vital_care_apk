@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 import 'package:vital_care/view/habitude_view.dart';
+import 'package:vital_care/view/home_view.dart';
 import 'package:vital_care/view/widget/app_bar_view.dart';
 import 'package:vital_care/view/widget/image_picker_validate.dart';
 import 'package:vital_care/view/widget/text_field_view.dart';
@@ -23,6 +23,9 @@ class AjoutProfilView extends ConsumerWidget {
     ImagePickerValidate imagePickerValidate = ImagePickerValidate();
     AppBarView appBarView = AppBarView();
 
+    allergieController.text = "N/A";
+    traitementController.text = "N/A";
+
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
       appBar: appBarView.appBarPage("Créer votre profil"),
@@ -31,14 +34,11 @@ class AjoutProfilView extends ConsumerWidget {
           child: Column(
             spacing: 16,
             children: [
-          
               Container(
                 width: 233,
                 height: 231,
-                decoration: BoxDecoration(
-                  color: Couleur.backgroundColor
-                ),
-                child: SvgPicture.asset("assets/logo/logo.svg"),
+                decoration: BoxDecoration(color: Couleur.backgroundColor),
+                child: Image.asset("assets/logo/container_logo.png"),
               ),
               Container(
                 padding: const EdgeInsets.all(8),
@@ -64,40 +64,44 @@ class AjoutProfilView extends ConsumerWidget {
                         ),
                         // Nom
                         textFieldView.buildTextField(nomController, 'Nom'),
-              
+
                         // Âge
                         textFieldView.buildTextField(
                           ageController,
                           'Âge',
                           TextInputType.number,
                         ),
-              
+
                         // Taille
                         textFieldView.buildTextField(
                           tailleController,
-                          'Taille',
+                          'Taille en cm',
                           TextInputType.number,
                         ),
-              
+
                         // Poids
                         textFieldView.buildTextField(
                           poidController,
-                          'Poids',
+                          'Poids initiale',
                           TextInputType.number,
                         ),
-              
+
                         // Allergie
-                        textFieldView.buildTextField(allergieController, 'Allergie'),
-              
+                        textFieldView.buildTextField(
+                          allergieController,
+                          'Allergie',
+                        ),
+
                         // Traitement
                         textFieldView.buildTextField(
                           traitementController,
                           'Traitement',
                         ),
-              
+
                         // Choisir une photo
                         InkWell(
-                          onTap: () => imagePickerValidate.pickImage(context, ref),
+                          onTap: () =>
+                              imagePickerValidate.pickImage(context, ref),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 12,
@@ -139,7 +143,7 @@ class AjoutProfilView extends ConsumerWidget {
                             ),
                           ),
                         ),
-              
+
                         // Aperçu de l'image
                         if (imagePickerValidate.selectedImage != null) ...[
                           const SizedBox(height: 12),
@@ -153,10 +157,11 @@ class AjoutProfilView extends ConsumerWidget {
                             ),
                           ),
                         ],
-              
+
                         // Bouton Valider
                         SizedBox(
                           width: double.infinity,
+                          height: 50,
                           child: ElevatedButton(
                             onPressed: () {
                               imagePickerValidate.valider(
@@ -172,7 +177,7 @@ class AjoutProfilView extends ConsumerWidget {
                               );
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (_) => HabitudeView()),
+                                MaterialPageRoute(builder: (_) => HomeView()),
                               );
                             },
                             style: ElevatedButton.styleFrom(

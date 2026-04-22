@@ -41,6 +41,80 @@ class HistoriqueTensionView extends ConsumerWidget {
                   context,
                   1,
                   Couleur.cardBackgroundColor,
+                  () async {
+                    try {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
+
+                      final profilAsync = ref.watch(profilViewModelProvider);
+                      final imcAsync = ref.watch(icmViewModelProvide);
+                      final medicamentAsync = ref.watch(
+                        medicamentViewModelProvider,
+                      );
+                      final tensionasync = ref.watch(tensionViewModelProvider);
+                      FonctionPdf pdf = FonctionPdf();
+
+                      profilAsync.when(
+                        data: (profil) {
+                          return imcAsync.when(
+                            data: (imcList) {
+                              return medicamentAsync.when(
+                                data: (medicamentEnAtente) {
+                                  return tensionasync.when(
+                                    data: (tensionList) {
+                                      pdf.generateHealthPdf(
+                                        profil: profil,
+                                        imcList: imcList,
+                                        medicaments: medicamentEnAtente,
+                                        tension: tensionList,
+                                      );
+                                    },
+                                    error: (e, s) => "",
+                                    loading: () => "",
+                                  );
+                                },
+                                error: (e, s) => "",
+                                loading: () => "",
+                              );
+                            },
+                            error: (e, s) => "",
+                            loading: () => "",
+                          );
+                        },
+                        error: (e, s) => "",
+                        loading: () => "",
+                      );
+
+                      Navigator.pop(context); // fermer loader
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          elevation: 1,
+                          backgroundColor: Couleur.buttonSecondaryColor,
+                          content: Text(
+                            "PDF généré avec succès ",
+                            style: TextStyle(color: Couleur.backgroundColor),
+                          ),
+                        ),
+                      );
+                    } catch (e) {
+                      Navigator.pop(context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Couleur.accentColor,
+                          content: Text(
+                            "Erreur lors de l'export",
+                            style: TextStyle(color: Couleur.backgroundColor),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 SizedBox(height: 16),
 
@@ -128,84 +202,6 @@ class HistoriqueTensionView extends ConsumerWidget {
             ),
           ),
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Couleur.backgroundColor,
-
-        onPressed: () async {
-          try {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => const Center(child: CircularProgressIndicator()),
-            );
-
-            final profilAsync = ref.watch(profilViewModelProvider);
-            final imcAsync = ref.watch(icmViewModelProvide);
-            final medicamentAsync = ref.watch(medicamentViewModelProvider);
-            final tensionasync = ref.watch(tensionViewModelProvider);
-            FonctionPdf pdf = FonctionPdf();
-
-            profilAsync.when(
-              data: (profil) {
-                return imcAsync.when(
-                  data: (imcList) {
-                    return medicamentAsync.when(
-                      data: (medicamentEnAtente) {
-                        return tensionasync.when(
-                          data: (tensionList) {
-                            pdf.generateHealthPdf(
-                              profil: profil,
-                              imcList: imcList,
-                              medicaments: medicamentEnAtente,
-                              tension: tensionList,
-                            );
-                          },
-                          error: (e, s) => "",
-                          loading: () => "",
-                        );
-                      },
-                      error: (e, s) => "",
-                      loading: () => "",
-                    );
-                  },
-                  error: (e, s) => "",
-                  loading: () => "",
-                );
-              },
-              error: (e, s) => "",
-              loading: () => "",
-            );
-
-            Navigator.pop(context); // fermer loader
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                elevation: 1,
-                backgroundColor: Couleur.buttonSecondaryColor,
-                content: Text(
-                  "PDF généré avec succès ",
-                  style: TextStyle(color: Couleur.backgroundColor),
-                ),
-              ),
-            );
-          } catch (e) {
-            Navigator.pop(context);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Couleur.accentColor,
-                content: Text(
-                  "Erreur lors de l'export",
-                  style: TextStyle(color: Couleur.backgroundColor),
-                ),
-              ),
-            );
-          }
-        },
-        icon: Icon(Icons.download),
-        label: Text("Exporter PDF", style: TextStyle(color: Couleur.textColor)),
       ),
 
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),

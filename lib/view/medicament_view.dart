@@ -46,6 +46,9 @@ class MedicamentView extends ConsumerWidget {
               final enAttente = medicament
                   .where((m) => m.status == MedicamentStatus.enAttente)
                   .toList();
+              if (enAttente.isEmpty) {
+                return Center(child: Text("Pas de medicament en attente"));
+              }
 
               return Expanded(
                 child: ListView.builder(
@@ -81,7 +84,21 @@ class MedicamentView extends ConsumerWidget {
                               ref
                                   .read(medicamentViewModelProvider.notifier)
                                   .validerMedicament(m);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Couleur.buttonSecondaryColor,
+                                  content: Text(
+                                    "Medicament valider",
+                                    style: TextStyle(
+                                      color: Couleur.backgroundColor,
+                                    ),
+                                  ),
+                                ),
+                              );
                             },
+                            couleurIcon: Couleur.butttonPrimaryColor,
+                            icon: "assets/icon/check.svg",
                           ),
                         ),
                       ),

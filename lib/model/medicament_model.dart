@@ -8,6 +8,7 @@ class Medicament {
   double dosage;
   int frequence;
   DateTime heure;
+  DateTime createAt;
   MedicamentStatus status;
   
 
@@ -17,6 +18,7 @@ class Medicament {
     required this.dosage,
     required this.frequence,
     required this.heure,
+    required this.createAt,
     this.status = MedicamentStatus.enAttente,
   });
 
@@ -27,6 +29,7 @@ class Medicament {
       'dosage': dosage,
       'frequence': frequence,
       'heure': heure.toIso8601String(),
+      'create_at' : createAt.toIso8601String(),
       'status': status.toString().split('.').last,
     };
   }

@@ -43,6 +43,82 @@ class HistoriqueImcView extends ConsumerWidget {
                     context,
                     0,
                     Couleur.cardBackgroundColor,
+                    () async {
+                      try {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) =>
+                              const Center(child: CircularProgressIndicator()),
+                        );
+
+                        final profilAsync = ref.watch(profilViewModelProvider);
+                        final imcAsync = ref.watch(icmViewModelProvide);
+                        final medicamentAsync = ref.watch(
+                          medicamentViewModelProvider,
+                        );
+                        final tensionasync = ref.watch(
+                          tensionViewModelProvider,
+                        );
+                        FonctionPdf pdf = FonctionPdf();
+
+                        profilAsync.when(
+                          data: (profil) {
+                            return imcAsync.when(
+                              data: (imcList) {
+                                return medicamentAsync.when(
+                                  data: (medicamentEnAtente) {
+                                    return tensionasync.when(
+                                      data: (tensionList) {
+                                        pdf.generateHealthPdf(
+                                          profil: profil,
+                                          imcList: imcList,
+                                          medicaments: medicamentEnAtente,
+                                          tension: tensionList,
+                                        );
+                                      },
+                                      error: (e, s) => "",
+                                      loading: () => "",
+                                    );
+                                  },
+                                  error: (e, s) => "",
+                                  loading: () => "",
+                                );
+                              },
+                              error: (e, s) => "",
+                              loading: () => "",
+                            );
+                          },
+                          error: (e, s) => "",
+                          loading: () => "",
+                        );
+
+                        Navigator.pop(context); // fermer loader
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            elevation: 1,
+                            backgroundColor: Couleur.buttonSecondaryColor,
+                            content: Text(
+                              "PDF généré avec succès ",
+                              style: TextStyle(color: Couleur.backgroundColor),
+                            ),
+                          ),
+                        );
+                      } catch (e) {
+                        Navigator.pop(context);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Couleur.accentColor,
+                            content: Text(
+                              "Erreur lors de l'export",
+                              style: TextStyle(color: Couleur.backgroundColor),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 16),
 
@@ -87,9 +163,12 @@ class HistoriqueImcView extends ConsumerWidget {
                             label: "Moyenn IMC",
                             value: "${imcMoyenne.toInt()}",
                             //heure:
-                                //"${DateTime.now().day}/${imcDate.toString()}/${DateTime.now().year}",
+                            //"${DateTime.now().day}/${imcDate.toString()}/${DateTime.now().year}",
                             iconHabitude: "assets/icon/imc.svg",
-                            widgetColor: containerResult.buildImcCard(containerColor: imcColor, interpretation: imcInterpretation)
+                            widgetColor: containerResult.buildImcCard(
+                              containerColor: imcColor,
+                              interpretation: imcInterpretation,
+                            ),
                           ),
                         ],
                       );
@@ -108,84 +187,6 @@ class HistoriqueImcView extends ConsumerWidget {
             ),
           ),
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Couleur.backgroundColor,
-
-        onPressed: () async {
-          try {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => const Center(child: CircularProgressIndicator()),
-            );
-
-            final profilAsync = ref.watch(profilViewModelProvider);
-            final imcAsync = ref.watch(icmViewModelProvide);
-            final medicamentAsync = ref.watch(medicamentViewModelProvider);
-            final tensionasync = ref.watch(tensionViewModelProvider);
-            FonctionPdf pdf = FonctionPdf();
-
-            profilAsync.when(
-              data: (profil) {
-                return imcAsync.when(
-                  data: (imcList) {
-                    return medicamentAsync.when(
-                      data: (medicamentEnAtente) {
-                        return tensionasync.when(
-                          data: (tensionList) {
-                            pdf.generateHealthPdf(
-                              profil: profil,
-                              imcList: imcList,
-                              medicaments: medicamentEnAtente,
-                              tension: tensionList,
-                            );
-                          },
-                          error: (e, s) => "",
-                          loading: () => "",
-                        );
-                      },
-                      error: (e, s) => "",
-                      loading: () => "",
-                    );
-                  },
-                  error: (e, s) => "",
-                  loading: () => "",
-                );
-              },
-              error: (e, s) => "",
-              loading: () => "",
-            );
-
-            Navigator.pop(context); // fermer loader
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                elevation:1,
-                backgroundColor: Couleur.buttonSecondaryColor,
-                content: Text(
-                  "PDF généré avec succès ",
-                  style: TextStyle(color: Couleur.backgroundColor),
-                ),
-              ),
-            );
-          } catch (e) {
-            Navigator.pop(context);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Couleur.accentColor,
-                content: Text(
-                  "Erreur lors de l'export",
-                  style: TextStyle(color: Couleur.backgroundColor),
-                ),
-              ),
-            );
-          }
-        },
-        icon: Icon(Icons.download),
-        label: Text("Exporter PDF", style: TextStyle(color: Couleur.textColor)),
       ),
 
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),

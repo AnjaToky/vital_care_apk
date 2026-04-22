@@ -72,7 +72,7 @@ class AppBarView {
             ],
           ),
           SizedBox(height: 8),
-          Container(width: double.infinity, height: 2, color: carColor),
+          Container(width: double.infinity, height: 1, color: carColor),
 
           SizedBox(height: 8),
         ],
@@ -80,10 +80,11 @@ class AppBarView {
     );
   }
 
-   Widget appBarHistorique(
+  Widget appBarHistorique(
     BuildContext context,
     int selectedIndex,
     Color carColor,
+    VoidCallback onTap,
   ) {
     Widget buildButton(String text, int index, Widget page) {
       final isSelected = selectedIndex == index;
@@ -124,6 +125,28 @@ class AppBarView {
               buildButton("IMC", 0, const HistoriqueImcView()),
               const SizedBox(width: 8),
               buildButton("Tension", 1, const HistoriqueTensionView()),
+
+              SizedBox(width: 16,),
+
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(150, 40),
+                  backgroundColor: Couleur.cardBackgroundColor,
+                  foregroundColor: Couleur.backgroundColor,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: onTap,
+                child: Text(
+                  "Exporter PDF",
+                  style: TextStyle(color: Couleur.backgroundColor, fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
           SizedBox(height: 8),
@@ -134,6 +157,4 @@ class AppBarView {
       ),
     );
   }
-
-
 }

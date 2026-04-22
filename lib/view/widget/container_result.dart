@@ -3,7 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vital_care/view/couleur/couleur.dart';
 
 class ContainerResult {
-  Widget buildIconButton({required VoidCallback onTap}) {
+  Widget buildIconButton({
+    required VoidCallback onTap,
+    required Color couleurIcon,
+    required String icon,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -11,13 +15,10 @@ class ContainerResult {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Couleur.butttonPrimaryColor,
+          color: couleurIcon,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: SvgPicture.asset(
-          "assets/icon/check.svg",
-          color: Couleur.backgroundColor,
-        ),
+        child: SvgPicture.asset(icon, color: Couleur.backgroundColor),
       ),
     );
   }
@@ -59,6 +60,77 @@ class ContainerResult {
     );
   }
 
+  Widget cardUrgence(
+    String nom,
+    String lieu,
+    String telephone,
+    Widget iconWidget,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Couleur.backgroundColor,
+        border: Border(bottom: BorderSide(width: 1, color: Couleur.textColor)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(0),
+            decoration: BoxDecoration(
+              color: Couleur.backgroundColor, // Bleu
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Titre avec icône
+                Row(
+                  children: [
+                    Text(
+                      nom,
+                      style: const TextStyle(
+                        color: Couleur.textColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SvgPicture.asset(
+                      'assets/icon/hopital.svg',
+                      width: 16,
+                      height: 16,
+                      colorFilter: const ColorFilter.mode(
+                        Couleur.textColor,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 4),
+
+                // Dosage
+                Text(
+                  lieu,
+                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                ),
+                const SizedBox(height: 4),
+
+                // Dosage
+                Text(
+                  telephone,
+                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          iconWidget,
+        ],
+      ),
+    );
+  }
+
   Widget cardMedicament(
     String nom,
     String dosage,
@@ -70,7 +142,7 @@ class ContainerResult {
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Couleur.backgroundColor,
-        border: Border(bottom: BorderSide(width: 2, color: Couleur.textColor)),
+        border: Border(bottom: BorderSide(width: 1, color: Couleur.textColor)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,16 +182,42 @@ class ContainerResult {
                 const SizedBox(height: 4),
 
                 // Heure
-                Text(
-                  heure,
-                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                Row(
+                  children: [
+                    Text(
+                      "Heur de prise : ",
+                      style: TextStyle(
+                        color: Couleur.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Text(
+                      heure,
+                      style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
 
                 // Dosage
-                Text(
-                  dosage,
-                  style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                Row(
+                  children: [
+                    Text(
+                      "Dosage : ",
+                      style: TextStyle(
+                        color: Couleur.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Text(
+                      dosage,
+                      style: TextStyle(color: Couleur.textColor, fontSize: 16),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -159,7 +257,11 @@ class ContainerResult {
               ),
               Text(
                 " : ${valuePourCent.toInt()}%",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: indicatorColor),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: indicatorColor,
+                ),
               ),
             ],
           ),
@@ -216,7 +318,7 @@ class ContainerResult {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Couleur.backgroundColor,
-        border: Border(bottom: BorderSide(color: Couleur.textColor, width: 2)),
+        border: Border(bottom: BorderSide(color: Couleur.textColor, width: 1)),
       ),
       child: Row(
         children: [
@@ -256,30 +358,42 @@ class ContainerResult {
     );
   }
 
-  Widget buildInfoCard(String label, String value) {
+  Widget buildInfoCard(String label, String value, Widget bouttonEdit) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Couleur.backgroundColor,
         border: Border(bottom: BorderSide(color: Couleur.textColor, width: 1)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Couleur.textColor,
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: Couleur.backgroundColor),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Couleur.textColor,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Couleur.textColor,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 16, color: Couleur.textColor),
-          ),
+          bouttonEdit,
         ],
       ),
     );

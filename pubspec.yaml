@@ -52,6 +52,9 @@ dependencies:
   open_filex: ^4.7.0
   permission_handler: ^12.0.1
   google_fonts: ^8.0.2
+  url_launcher: ^6.3.2
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.0
 
 dev_dependencies:
   flutter_test:

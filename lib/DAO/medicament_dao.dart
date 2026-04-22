@@ -60,6 +60,9 @@ class MedicamentDao {
       map['heure'] = _encryptService!.encrypt(
         medicament.heure.toIso8601String(),
       );
+      map['create_at'] = _encryptService!.encrypt(
+        medicament.createAt.toIso8601String(),
+      );
       map['status'] = medicament.status.toString().split('.').last;
 
       return await db.update(
@@ -88,6 +91,9 @@ class MedicamentDao {
         final frequenceClair = _encryptService!.decrypt(
           row['frequence'] as String,
         );
+        final createAtClaire = _encryptService!.decrypt(
+          row['create_at'] as String,
+        );
         final heureClaire = _encryptService!.decrypt(row['heure'] as String);
 
         // 2. Conversion des types (parsing)
@@ -99,6 +105,7 @@ class MedicamentDao {
             dosage: double.tryParse(dosageClair) ?? 0.0,
             frequence: int.tryParse(frequenceClair) ?? 0,
             heure: DateTime.tryParse(heureClaire) ?? DateTime.now(),
+            createAt: DateTime.tryParse(createAtClaire) ?? DateTime.now(),
             status: MedicamentStatus.values.firstWhere(
               (e) => e.toString().split('.').last == row['status'],
               orElse: () => MedicamentStatus.enAttente,

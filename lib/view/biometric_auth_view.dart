@@ -47,9 +47,17 @@ class _BiometricAuthViewState extends ConsumerState<BiometricAuthView> {
       profilAsync.when(
         data: (profil) {
           if (profil != null) {
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+              (route) => false,
+            );
           } else {
-            Navigator.pushNamed(context, '/ajout_profil');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/ajout_profil',
+              (route) => false,
+            );
           }
         },
         loading: () {

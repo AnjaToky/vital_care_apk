@@ -14,8 +14,8 @@ class MedicamentManquerPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(medicamentViewModelProvider);
     ContainerResult containerResult = ContainerResult();
-     BottomNavBar bottomNavBar = BottomNavBar();
-     AppBarView appBarView = AppBarView();
+    BottomNavBar bottomNavBar = BottomNavBar();
+    AppBarView appBarView = AppBarView();
 
     return Scaffold(
       backgroundColor: Couleur.backgroundColor,
@@ -29,7 +29,12 @@ class MedicamentManquerPage extends ConsumerWidget {
               final manques = list
                   .where((m) => m.status == MedicamentStatus.manquer)
                   .toList();
-          
+
+              if (manques.isEmpty) {
+                return Center(child: Text("Pas de medicament en manquer"));
+              }
+
+
               return Expanded(
                 child: ListView.builder(
                   itemCount: manques.length,
@@ -42,7 +47,10 @@ class MedicamentManquerPage extends ConsumerWidget {
                         "${m.dosage} gramme",
                         "${m.frequence} fois par jour ",
                         "${m.heure.hour} h : ${m.heure.minute} ",
-                        containerResult.buildIconStatus(icon: "assets/icon/close.svg", iconColor: Couleur.buttonAccentColor)
+                        containerResult.buildIconStatus(
+                          icon: "assets/icon/close.svg",
+                          iconColor: Couleur.buttonAccentColor,
+                        ),
                       ),
                     );
                   },
@@ -51,13 +59,10 @@ class MedicamentManquerPage extends ConsumerWidget {
             },
             loading: () => CircularProgressIndicator(),
             error: (e, _) => Text("Erreur"),
-          
-            
           ),
         ],
       ),
       bottomNavigationBar: bottomNavBar.buildBottomNavBar(context, ref),
-
     );
   }
 }

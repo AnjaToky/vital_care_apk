@@ -56,6 +56,7 @@ class DatabaseHelper {
       dosage TEXT NOT NULL,
       frequence TEXT NOT NULL,
       heure TEXT NOT NULL,
+      create_at TEXT NOT NULL,
       status TEXT
     )
   ''');

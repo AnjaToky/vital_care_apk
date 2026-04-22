@@ -59,10 +59,11 @@ class HabitudeView extends ConsumerWidget {
 
                                 // Date
                                 Text(
-                                  '|${DateFormat('dd MMMM yyyy, HH:mm').format(habitude.createdAt)}',
+                                  '${DateFormat('dd MMMM yyyy à HH:mm').format(habitude.createdAt)}',
                                   style: const TextStyle(
                                     fontSize: 32,
                                     color: Couleur.textColor,
+                                    fontWeight: FontWeight.bold
                                   ),
                                 ),
                                 SizedBox(height: 16),

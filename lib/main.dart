@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vital_care/view/ajout_habitude.dart';
+import 'package:vital_care/services/notification_service.dart';
 import 'package:vital_care/view/ajout_profil_view.dart';
 import 'package:vital_care/view/auth_guard_view.dart';
 import 'package:vital_care/view/biometric_auth_view.dart';
@@ -15,11 +15,16 @@ import 'package:vital_care/view/profil_view.dart';
 import 'package:vital_care/view/medicament_view.dart';
 import 'package:vital_care/view/urgence_view.dart';
 
-void main() {
+void main() async {
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialise les notifications
+  await NotificationService().initialiser();
 
   runApp(ProviderScope(child: MyApp()));
 }
@@ -32,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+        textTheme: GoogleFonts.latoTextTheme(ThemeData.light().textTheme),
       ),
       title: 'Vital Care',
       home: BiometricAuthView(),
@@ -42,7 +47,6 @@ class MyApp extends StatelessWidget {
         '/ajout_profil': (context) => AjoutProfilView(),
         '/medicament': (context) => MedicamentView(),
         '/habitude_view': (context) => HabitudeView(),
-        '/ajout_habitude': (context) => AjoutHabitude(),
         '/home': (context) => HomeView(),
         '/urgence': (context) => UrgenceView(),
         '/historique': (context) => HistoriqueImcView(),
