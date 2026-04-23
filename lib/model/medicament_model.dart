@@ -10,7 +10,6 @@ class Medicament {
   DateTime heure;
   DateTime createAt;
   MedicamentStatus status;
-  
 
   Medicament({
     this.id,
@@ -22,6 +21,26 @@ class Medicament {
     this.status = MedicamentStatus.enAttente,
   });
 
+  Medicament copyWith({
+    int? id,
+    String? nom,
+    double? dosage,
+    int? frequence,
+    DateTime? heure,
+    DateTime? createAt,
+    MedicamentStatus? status,
+  }) {
+    return Medicament(
+      id: id ?? this.id,
+      nom: nom ?? this.nom,
+      dosage: dosage ?? this.dosage,
+      frequence: frequence ?? this.frequence,
+      heure: heure ?? this.heure,
+      createAt: createAt ?? this.createAt,
+      status: status ?? this.status,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -29,7 +48,7 @@ class Medicament {
       'dosage': dosage,
       'frequence': frequence,
       'heure': heure.toIso8601String(),
-      'create_at' : createAt.toIso8601String(),
+      'create_at': createAt.toIso8601String(),
       'status': status.toString().split('.').last,
     };
   }

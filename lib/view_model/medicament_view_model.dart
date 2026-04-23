@@ -15,7 +15,6 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
     return medicamentModel.afficherMedicaments();
   }
 
-
   Future<void> validerMedicament(Medicament medicament) async {
     final model = ref.read(medicamentViewModel);
     medicament.status = MedicamentStatus.valider;
@@ -35,6 +34,7 @@ class MedicamentViewModel extends AsyncNotifier<List<Medicament>> {
           medic.heure.isBefore(now)) {
         medic.status = MedicamentStatus.manquer;
         ref.read(medicamentViewModel).modifierMedicament(medic);
+        ref.read(medicamentViewModel).afficherMedicaments();
       }
     }
   }

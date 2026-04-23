@@ -88,7 +88,12 @@ class FonctionPdf {
                     "${m.dosage} mg",
                     m.frequence,
                     m.heure.hour,
-                    m.status,
+                    if (m.status == MedicamentStatus.enAttente)
+                      "En Attente"
+                    else if (m.status == MedicamentStatus.valider)
+                      "Valider"
+                    else
+                      "Manquer",
                   ],
                 )
                 .toList(),
